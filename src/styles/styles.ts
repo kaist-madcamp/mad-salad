@@ -2,7 +2,7 @@ import { createGlobalStyle, DefaultTheme } from 'styled-components';
 import reset from 'styled-reset';
 
 const commonTheme = {
-  accent: '#0095f6',
+  accent: '#33CC33',
 };
 
 export const lightTheme: DefaultTheme = {
