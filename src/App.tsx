@@ -9,12 +9,13 @@ import NotFound from './pages/NotFound';
 import { ThemeProvider } from 'styled-components';
 import useAuth, { TOKEN } from './hooks/useLogin';
 import useDarkMode from './hooks/useDarkmode';
+import { useEffect } from 'react';
 
 function App() {
   const [isDarkTheme, toggleDarkMode] = useDarkMode();
   const isLoggedIn = useAuth(localStorage.getItem(TOKEN));
 
-  console.log(isDarkTheme);
+  console.log('App rendered!');
 
   return (
     <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
@@ -22,12 +23,16 @@ function App() {
         <GlobalStyles />
         <Switch>
           <Route path={routes.home} exact>
-            {isLoggedIn ? <Home toggleTheme={toggleDarkMode} /> : <Login toggleDarkMode={toggleDarkMode} />}
+            {isLoggedIn ? (
+              <Home darkModeInput={[isDarkTheme, toggleDarkMode]} />
+            ) : (
+              <Login darkModeInput={[isDarkTheme, toggleDarkMode]} />
+            )}
           </Route>
 
           {!isLoggedIn ? (
             <Route path={routes.signUp}>
-              <SignUp toggleDarkMode={toggleDarkMode}/>
+              <SignUp darkModeInput={[isDarkTheme, toggleDarkMode]} />
             </Route>
           ) : null}
 
