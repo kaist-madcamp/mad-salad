@@ -28,21 +28,18 @@ const DarkModeBtn = styled.span`
 
 interface Props {
   children: React.ReactNode;
-  toggleDarkMode: () => void;
+  darkModeInput: [Boolean, () => void];
 }
 
-export default function AuthLayout({ children, toggleDarkMode }: Props) {
-  const [darkMode] = useDarkMode();
-
-  console.log('authlayout rendered');
+export default function AuthLayout({ children, darkModeInput }: Props) {
   return (
     <Container>
       <Wrapper>{children}</Wrapper>
       <Footer>
-        <DarkModeBtn onClick={toggleDarkMode}>
+        <DarkModeBtn onClick={darkModeInput[1]}>
           <FontAwesomeIcon
-            color={darkMode ? 'white' : 'dark'}
-            icon={darkMode ? faSun : faMoon}
+            color={darkModeInput[0] ? 'white' : 'dark'}
+            icon={darkModeInput[0] ? faSun : faMoon}
             size="2x"
           />
         </DarkModeBtn>
