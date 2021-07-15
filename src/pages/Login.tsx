@@ -27,10 +27,10 @@ interface LocationState {
 }
 
 interface Props {
-  toggleDarkMode: () => void;
+  darkModeInput: [Boolean, () => void];
 }
 
-export default function Login({ toggleDarkMode }: Props) {
+export default function Login({ darkModeInput }: Props) {
   const location = useLocation<LocationState>();
   const [reqErrorMessage, setReqErrorMessage] = useState<string>('');
 
@@ -81,7 +81,7 @@ export default function Login({ toggleDarkMode }: Props) {
   };
 
   return (
-    <AuthLayout toggleDarkMode={toggleDarkMode}>
+    <AuthLayout darkModeInput={darkModeInput}>
       <PageTitle title="Login" />
       <FormBox>
         <Title>금융 앱</Title>
