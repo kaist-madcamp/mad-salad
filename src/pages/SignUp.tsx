@@ -1,5 +1,3 @@
-// import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthLayout from '../components/auth/AuthLayout';
 import PageTitle from '../components/PageTitle';
 import FormBox from '../components/auth/FormBox';
@@ -14,17 +12,16 @@ import { Title } from './Login';
 import { useHistory } from 'react-router-dom';
 
 interface SignUpFormField {
-  name: string;
-  username: string;
   email: string;
+  name: string;
   password: string;
 }
 
 interface Props {
-  toggleDarkMode: () => void;
+  darkModeInput: [Boolean, () => void];
 }
 
-export default function SignUp({ toggleDarkMode }: Props) {
+export default function SignUp({ darkModeInput }: Props) {
   const history = useHistory();
 
   // const onCompleted = (data: { createAccount: MutationResponse }) => {
@@ -46,7 +43,7 @@ export default function SignUp({ toggleDarkMode }: Props) {
   // >(CREATE_ACCOUNT_MUTATION, {
   //   onCompleted,
   // });
-
+  
   const {
     register,
     handleSubmit,
@@ -56,27 +53,19 @@ export default function SignUp({ toggleDarkMode }: Props) {
     mode: 'onChange',
   });
 
-  const loading = false;
+
   const onSubmitValid = async (data: SignUpFormField) => {
-    if (loading) return null;
+    // if (isValidating) return null;
+
     console.log(data);
-    // createAccount({
-    //   variables: {
-    //     ...data,
-    //   },
-    // });
   };
 
   return (
-    <AuthLayout toggleDarkMode={toggleDarkMode}>
+    <AuthLayout darkModeInput={darkModeInput}>
       <PageTitle title="Sign up | Instaclone" />
       <FormBox>
         <Title>금융 앱</Title>
         <h2>나의 돈을 시각화, 직관화!</h2>
-        {/* <Button type="submit">
-          <FontAwesomeIcon icon={faFacebookSquare} />
-          Facebook으로 로그인
-        </Button> */}
         <Separator />
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
@@ -108,18 +97,6 @@ export default function SignUp({ toggleDarkMode }: Props) {
           />
           <FormError message={errors?.name?.message} />
           <Input
-            {...register('username', {
-              required: {
-                value: true,
-                message: '사용자 이름은 필수입니다.',
-              },
-            })}
-            type="text"
-            placeholder="사용자 이름"
-            hasError={Boolean(errors?.username)}
-          />
-          <FormError message={errors?.username?.message} />
-          <Input
             {...register('password', {
               required: {
                 value: true,
@@ -138,7 +115,7 @@ export default function SignUp({ toggleDarkMode }: Props) {
           <Button disabled={!isValid} type="submit">
             가입
           </Button>
-          {loading && <p>로딩중..</p>}
+          {/* {isValidating && <p>로딩중..</p>} */}
         </form>
       </FormBox>
       <BottomBox
