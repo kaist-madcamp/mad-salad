@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
+import { TOKEN } from '../hooks/useLogin';
 
-const token = localStorage.getItem('tk');
+const token = localStorage.getItem(TOKEN);
 
 const Axios: AxiosInstance = axios.create({
   baseURL: 'https://back.xircle.org',
