@@ -7,23 +7,26 @@ import SignUp from './pages/SignUp';
 import routes from './routes';
 import NotFound from './pages/NotFound';
 import { ThemeProvider } from 'styled-components';
-import useAuth, { TOKEN } from './hooks/useLogin';
+import useAuth from './hooks/useLogin';
 import useDarkMode from './hooks/useDarkmode';
 
 function App() {
   const [isDarkTheme, toggleDarkMode] = useDarkMode();
-  const isLoggedIn = useAuth(localStorage.getItem(TOKEN));
+  const [isLoggedIn, toggleLogInOut] = useAuth();
 
   return (
     <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
       <HelmetProvider>
         <GlobalStyles />
         <Switch>
-          <Route path={routes.home} exact>
+          <Route path={routes.home}>
             {isLoggedIn ? (
               <Home darkModeInput={[isDarkTheme, toggleDarkMode]} />
             ) : (
-              <Login darkModeInput={[isDarkTheme, toggleDarkMode]} />
+              <Login
+                useAuthHookInput={[isLoggedIn, toggleLogInOut]}
+                darkModeInput={[isDarkTheme, toggleDarkMode]}
+              />
             )}
           </Route>
 
