@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const DARK_MODE = 'DARK_MODE';
 
-export default function useDarkMode(): [Boolean, () => void] {
+export default function useDarkMode(): [boolean, () => void] {
   const [isDark, setIsDark] = useState<boolean>(
     Boolean(localStorage.getItem(DARK_MODE)),
   );

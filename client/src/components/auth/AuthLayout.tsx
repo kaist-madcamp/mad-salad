@@ -1,8 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
-import useDarkMode from '../../hooks/useDarkmode';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-regular-svg-icons';
+
+interface Props {
+  children: React.ReactNode;
+  darkModeInput: [boolean, () => void];
+}
+
+export default function AuthLayout({ children, darkModeInput }: Props) {
+  return (
+    <Container>
+      <Wrapper>{children}</Wrapper>
+      <Footer>
+        <DarkModeBtn onClick={darkModeInput[1]}>
+          <FontAwesomeIcon
+            color={darkModeInput[0] ? 'white' : 'dark'}
+            icon={darkModeInput[0] ? faSun : faMoon}
+            size="2x"
+          />
+        </DarkModeBtn>
+      </Footer>
+    </Container>
+  );
+}
 
 const Container = styled.div`
   display: flex;
@@ -25,25 +46,3 @@ const Footer = styled.footer`
 const DarkModeBtn = styled.span`
   cursor: pointer;
 `;
-
-interface Props {
-  children: React.ReactNode;
-  darkModeInput: [Boolean, () => void];
-}
-
-export default function AuthLayout({ children, darkModeInput }: Props) {
-  return (
-    <Container>
-      <Wrapper>{children}</Wrapper>
-      <Footer>
-        <DarkModeBtn onClick={darkModeInput[1]}>
-          <FontAwesomeIcon
-            color={darkModeInput[0] ? 'white' : 'dark'}
-            icon={darkModeInput[0] ? faSun : faMoon}
-            size="2x"
-          />
-        </DarkModeBtn>
-      </Footer>
-    </Container>
-  );
-}
