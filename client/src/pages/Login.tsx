@@ -11,28 +11,30 @@ import FormError, { SFormError } from '../components/auth/FormError';
 import PageTitle from '../components/PageTitle';
 import routes from '../routes';
 import { useLocation } from 'react-router-dom';
-import useAuth from '../hooks/useLogin';
-import useDarkMode from '../hooks/useDarkmode';
+import { useMutation } from 'react-query';
+import { loginUserAPI } from '../lib/api/auth';
 
 interface LoginFormField {
-  username: string;
+  email: string;
   password: string;
   result: string;
 }
 
 interface LocationState {
-  username: string;
+  email: string;
   password: string;
   message: string;
 }
 
 interface Props {
-  darkModeInput: [Boolean, () => void];
+  darkModeInput: [boolean, () => void];
+  useAuthHookInput: [boolean, (token: string | undefined) => void];
 }
 
-export default function Login({ darkModeInput }: Props) {
+export default function Login({ darkModeInput, useAuthHookInput }: Props) {
   const location = useLocation<LocationState>();
   const [reqErrorMessage, setReqErrorMessage] = useState<string>('');
+  const { mutateAsync, isLoading } = useMutation(loginUserAPI);
 
   const {
     register,
@@ -41,43 +43,30 @@ export default function Login({ darkModeInput }: Props) {
   } = useForm<LoginFormField>({
     mode: 'onChange',
     defaultValues: {
-      username: location?.state?.username || '',
+      email: location?.state?.email || '',
       password: location?.state?.password || '',
     },
   });
 
-  // const onCompleted = (data: { login: any }) => {
-  //   const {
-  //     login: { ok, error, token },
-  //   } = data;
-  //   if (!ok) {
-  //     return setReqErrorMessage(error!);
-  //   }
-  //   if (token) {
-  //     useAuth(token);
-  //   }
-  // };
-
-  // const [login, { loading }] = useMutation<
-  //   { login: any },
-  //   LoginFormField
-  // >(LOGIN_MUTATION, {
-  //   onCompleted,
-  // });
-
-  // const onSubmitValid = (data: LoginFormField) => {
-  //   if (loading) return null;
-  //   login({
-  //     variables: {
-  //       ...data,
-  //     },
-  //   });
-  // };
-
-  const loading = true;
-  const onSubmitValid = (data: any) => {
-    if (loading) return null;
-    // HTTP request
+  const onSubmitValid = async (data: LoginFormField) => {
+    if (isLoading) return null;
+    console.log(data);
+    const { email, password } = data;
+    try {
+      const response = await mutateAsync({
+        email,
+        password,
+      });
+      console.log(response);
+      // if (response.token!) {
+      //   useAuthHookInput[1](token);
+      // } else {
+      //   setReqErrorMessage(response.error);
+      // }
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   };
 
   return (
@@ -88,17 +77,17 @@ export default function Login({ darkModeInput }: Props) {
         <Notification>{location?.state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
-            {...register('username', {
+            {...register('email', {
               required: {
                 value: true,
-                message: '사용자 이름은 필수입니다.',
+                message: '이메일은 필수입니다.',
               },
             })}
             type="text"
-            placeholder="사용자 이름"
-            hasError={Boolean(errors?.username)}
+            placeholder="이메일"
+            hasError={Boolean(errors?.email)}
           />
-          <FormError message={errors?.username?.message} />
+          <FormError message={errors?.email?.message} />
           <Input
             {...register('password', {
               required: {
@@ -119,7 +108,7 @@ export default function Login({ darkModeInput }: Props) {
             disabled={!isValid && !Boolean(errors.result?.message)}
             type="submit"
           >
-            {loading ? '로그인 중 ...' : '로그인'}
+            {isLoading ? '로그인 중 ...' : '로그인'}
           </Button>
         </form>
         <Separator />
@@ -146,19 +135,4 @@ export const ErrorMessage = styled(SFormError)`
 
 export const Title = styled.h1`
   color: ${(props) => props.theme.color};
-`;
-
-const FaceBookLogin = styled.button`
-  color: #385185;
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-  margin: 0 0 20px;
-  span {
-    margin: 0 10px;
-    font-weight: 600;
-  }
-  svg {
-    font-size: 16px;
-  }
 `;

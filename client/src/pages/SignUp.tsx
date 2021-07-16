@@ -20,12 +20,11 @@ interface SignUpFormField {
 }
 
 interface Props {
-  darkModeInput: [Boolean, () => void];
+  darkModeInput: [boolean, () => void];
 }
 
 export default function SignUp({ darkModeInput }: Props) {
   const history = useHistory();
-
   const { mutateAsync, isLoading } = useMutation(createUserAPI);
 
   const {
@@ -38,7 +37,7 @@ export default function SignUp({ darkModeInput }: Props) {
 
   const onSubmitValid = async (data: SignUpFormField) => {
     if (isLoading) return;
-    // console.log(data);
+    console.log(data);
     const { email, name, password } = data;
     try {
       const response = await mutateAsync({
@@ -50,7 +49,6 @@ export default function SignUp({ darkModeInput }: Props) {
       history.push(routes.home, {
         message: '계정이 생성되었습니다. 로그인 해주세요.',
         email,
-        name,
         password,
       });
     } catch (error) {
@@ -114,7 +112,7 @@ export default function SignUp({ darkModeInput }: Props) {
           <Button disabled={!isValid} type="submit">
             가입
           </Button>
-          {/* {isValidating && <p>로딩중..</p>} */}
+          {isLoading && <p>로딩중..</p>}
         </form>
       </FormBox>
       <BottomBox
