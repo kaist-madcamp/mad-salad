@@ -7,7 +7,7 @@ export interface Props {
 export default function PageTitle({ title }: Props) {
   return (
     <Helmet>
-      <title> {title} | Instaclone </title>
+      <title> {title} | Finance App </title>
     </Helmet>
   );
 }
