@@ -11,13 +11,26 @@ export const lightTheme: DefaultTheme = {
   borderColor: 'rgb(219, 219, 219)',
   color: 'rgb(38, 38, 38)',
   errorMsgColor: '#ed4956',
+  checkedColor: '#ffffff',
+  uncheckedBgColor: '#eee',
+  checkedBgColor: 'rgb(51, 51, 51)',
+
+  itemRowColor: '#333',
+  itemRowBgColor: '#f0f0f0',
 };
 export const darkTheme: DefaultTheme = {
   ...commonTheme,
-  bgColor: '#2c2c2c',
+  bgColor: '#000',
   borderColor: '#1c1c1c',
-  color: 'white',
+  color: '#fff',
   errorMsgColor: '#fff',
+  checkedColor: '#000',
+  checkedBgColor: '#eee',
+  backgroundImage: 'linear-gradient(315deg, #434343 0%, #000 74%)',
+  backgroundAttachment: 'fixed',
+
+  itemRowBgColor: '#333',
+  itemRowColor: '#fff',
 };
 
 export const GlobalStyles = createGlobalStyle`
@@ -36,5 +49,8 @@ export const GlobalStyles = createGlobalStyle`
     }
     a {
         text-decoration: none;
+    }
+    div {
+      font-size: 18px;
     }
 `;

@@ -1,4 +1,4 @@
-import "styled-components";
+import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -7,5 +7,12 @@ declare module 'styled-components' {
     bgColor?: string;
     borderColor?: string;
     color?: string;
+    checkedColor?: string;
+    checkedBgColor?: string;
+    backgroundImage?: string;
+    backgroundAttachment?: string;
+    uncheckedBgColor?: string;
+    itemRowBgColor?: string;
+    itemRowColor?: string;
   }
 }
