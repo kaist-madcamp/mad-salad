@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import MonthSelectorWrapper from '../components/anlytics/MonthSelectorWrapper';
 import PageTitle from '../components/PageTitle';
-import CategoryChart from '../components/anlytics/CategoryChart';
-import { useState } from 'react';
-import DateChart from '../components/anlytics/DateChart';
+import CategoryChart from '../components/anlytics/chart/CategoryChart';
+import DateChart from '../components/anlytics/chart/DateChart';
 import { FetchHistoryInput } from '../lib/api/types';
 
 export default function Analytics() {
