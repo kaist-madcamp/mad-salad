@@ -4,6 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import routes from '../routes';
 import Calendar from './Calendar';
 import Analytics from './Analytics';
+import HistoryView from './HistoryView';
 
 interface Props {
   darkModeInput: [boolean, () => void];
@@ -11,34 +12,36 @@ interface Props {
 
 export default function Home({ darkModeInput }: Props) {
   return (
-    <>
-      <Container>
-        <PageTitle title="Home" />
-        <Navigation>
-          <button onClick={darkModeInput[1]}>mode 변경</button>
-          <Link to={routes.calendar}>
-            <p>캘린더</p>
-          </Link>
-          <Link to={routes.analytics}>
-            <p>차트</p>
-          </Link>
-        </Navigation>
+    <Container>
+      <PageTitle title="Home" />
+      <Navigation>
+        <button onClick={darkModeInput[1]}>mode 변경</button>
+        <Link to={routes.calendar}>
+          <p>캘린더</p>
+        </Link>
+        <Link to={routes.analytics}>
+          <p>차트</p>
+        </Link>
+      </Navigation>
 
-        {/* Router  */}
-        <Switch>
-          <Route path={routes.calendar}>
-            <Calendar />
-          </Route>
-          <Route path={routes.analytics}>
-            <Analytics />
-          </Route>
-        </Switch>
-      </Container>
-    </>
+      {/* Router  */}
+      <Switch>
+        <Route path="/" exact>
+          <HistoryView />
+        </Route>
+        <Route path={routes.calendar}>
+          <Calendar />
+        </Route>
+        <Route path={routes.analytics}>
+          <Analytics />
+        </Route>
+      </Switch>
+    </Container>
   );
 }
 
 const Container = styled.div`
+  min-height: 100vh;
   background-image: ${(props) => props.theme.backgroundImage};
   background-attachment: ${(props) => props.theme.backgroundAttachment};
 `;
