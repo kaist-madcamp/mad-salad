@@ -1,41 +1,10 @@
-import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
 import MonthSelectorWrapper from '../components/anlytics/MonthSelectorWrapper';
-import PolarChartWrapper from '../components/anlytics/PolarChartWrapper';
 import PageTitle from '../components/PageTitle';
-import BarChartWrapper from '../components/anlytics/BarChartWrapper';
+import CategoryChart from '../components/anlytics/CategoryChart';
 import { useState } from 'react';
-import LineChart from '../components/anlytics/LineChart';
-import { fetchHistoryAPI, FetchHistoryInput } from '../lib/api/history';
-
-const data = [
-  {
-    id: 57,
-    userId: 1,
-    categoryId: 6,
-    paymentId: 2,
-    type: 'expenditure',
-    amount: 3,
-    content: 'ㅇㄹ',
-    date: '2021-07-15T15:00:00.000Z',
-    isDeleted: 0,
-    createdAt: '2021-07-16T10:57:42.000Z',
-    updatedAt: '2021-07-16T10:57:42.000Z',
-  },
-  {
-    id: 58,
-    userId: 1,
-    categoryId: 6,
-    paymentId: 1,
-    type: 'expenditure',
-    amount: 1650000,
-    content: 'trt',
-    date: '2021-07-15T15:00:00.000Z',
-    isDeleted: 0,
-    createdAt: '2021-07-16T11:37:24.000Z',
-    updatedAt: '2021-07-16T11:37:24.000Z',
-  },
-];
+import DateChart from '../components/anlytics/DateChart';
+import { FetchHistoryInput } from '../lib/api/types';
 
 export default function Analytics() {
   const [AnalyticsOption, setAnalyticsOption] = useState<string>('category');
@@ -44,16 +13,9 @@ export default function Analytics() {
     month: 7,
   });
 
-  // const { data, isLoading, error } = useQuery(['history', selectedDate], () =>
-  //   fetchHistoryAPI(selectedDate),
-  // );
-
   const MonthIndicatorClickedHandler = (data: FetchHistoryInput) => {
     setSelectedDate(data);
   };
-
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Error..</p>;
 
   return (
     <Container>
@@ -81,11 +43,10 @@ export default function Analytics() {
         {/* Chart Container */}
         {AnalyticsOption === 'category' ? (
           <CategorySection>
-            <PolarChartWrapper data={data} />
-            <BarChartWrapper data={data} />
+            <CategoryChart selectedDate={selectedDate} />
           </CategorySection>
         ) : (
-          <LineChart data={data} />
+          <DateChart selectedDate={selectedDate} />
         )}
       </Wrapper>
     </Container>
@@ -111,7 +72,7 @@ const Wrapper = styled.div`
 const AnalyticsOptions = styled.div`
   width: 100%;
   justify-content: center;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   border-radius: 0.625rem;
   overflow: hidden;
 `;
@@ -139,6 +100,6 @@ const AnalyticsOptionBtn = styled(button)<{ checked: boolean }>`
 `;
 
 const CategorySection = styled.section`
-  margin: 3rem 0;
+  margin: 1.5rem 0 3rem;
   padding-bottom: 7.5rem;
 `;
