@@ -1,11 +1,18 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import MonthSelectorWrapper from '../components/anlytics/MonthSelectorWrapper';
 import SumIndicatorWrapper from '../components/anlytics/SumIndicatorWrapper';
-import { FetchHistoryData, FetchHistoryInput } from '../lib/api/types';
-import HistoryViewWrapper from '../components/anlytics/HistoryViewWrapper';
+import {
+  FetchHistoryByCreatedAtData,
+  FetchHistoryData,
+  FetchHistoryInput,
+} from '../lib/api/types';
+import HistoryViewWrapper from '../components/anlytics/history/HistoryViewWrapper';
 import { useQuery } from 'react-query';
-import { fetchHistoryAPI } from '../lib/api/history';
+import {
+  fetchHistoryAPI,
+  fetchHistoryByCreatedAtAPI,
+} from '../lib/api/history';
+import { Notification } from '../components/anlytics/chart/CategoryChart';
 
 interface Props {}
 
@@ -19,17 +26,29 @@ export default function HistoryView(props: Props) {
   const [selectedDate, setSelectedDate] = useState<FetchHistoryInput>({
     year: 2021,
     month: 7,
-  });        
+  });
   const [
     selectedSumIndicator,
     setSelectedSumIndicator,
   ] = useState<SumIndicatorType>(SumIndicatorType.DEFAULT);
 
-  const { data: historyData, isLoading, error } = useQuery<
-    FetchHistoryData[] | undefined
-  >(['history', selectedDate], () => fetchHistoryAPI(selectedDate), {
-    retry: 1,
-  });
+  const { data: historyDataByCreatedAt, isLoading, error } = useQuery<
+    FetchHistoryByCreatedAtData[][] | undefined
+  >(
+    ['historyByCreatedAt', selectedDate],
+    () => fetchHistoryByCreatedAtAPI(selectedDate),
+    {
+      retry: 1,
+    },
+  );
+
+  const { data: historyData } = useQuery<FetchHistoryData[] | undefined>(
+    ['history', selectedDate],
+    () => fetchHistoryAPI(selectedDate),
+    {
+      retry: 1,
+    },
+  );
 
   const MonthIndicatorClickedHandler = (data: FetchHistoryInput) => {
     setSelectedDate(data);
@@ -40,14 +59,21 @@ export default function HistoryView(props: Props) {
   };
 
   return (
-    <div>
+    <>
       <MonthSelectorWrapper onClicked={MonthIndicatorClickedHandler} />
       <SumIndicatorWrapper
-        SumIndicatorClickedHandler={SumIndicatorClickedHandler}
-        selectedSumIndicator={selectedSumIndicator}
         historyData={historyData!}
+        selectedSumIndicator={selectedSumIndicator}
+        SumIndicatorClickedHandler={SumIndicatorClickedHandler}
       />
-      <HistoryViewWrapper />
-    </div>
+      {isLoading && <Notification>Loading...</Notification>}
+      {error && <Notification>Error..</Notification>}
+      {!historyData ? null : (
+        <HistoryViewWrapper
+          historyDataByCreatedAt={historyDataByCreatedAt!}
+          selectedSumIndicator={selectedSumIndicator}
+        />
+      )}
+    </>
   );
 }
