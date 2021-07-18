@@ -1,20 +1,30 @@
 import Axios from '../defaultClient';
-import { CoreOutput } from '../CoreOutput';
+import {
+  FetchHistoryData,
+  FetchHistoryInput,
+  FetchHistoryOutput,
+  FetchHistoryByCategoryData,
+  FetchHistoryByCategoryOutput,
+} from './types';
 
-export interface FetchHistoryInput {
-  year: number;
-  month: number;
-}
-interface FetchHistoryOutput extends CoreOutput {
-  data: any[];
-}
-
-export const fetchHistoryAPI = async (fetchHistoryInput: FetchHistoryInput) => {
+export const fetchHistoryAPI = async (
+  fetchHistoryInput: FetchHistoryInput,
+): Promise<FetchHistoryData[] | undefined> => {
   const { data } = await Axios.get<FetchHistoryOutput>(
-    `/history?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
+    `/transaction/history?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
-  if (!data.ok) {
-    alert(data.error);
-  }
+  if (!data.ok) alert(data.error);
+  console.log(data.data);
+  return data.data;
+};
+
+export const fetchHistoryByCategoryAPI = async (
+  fetchHistoryInput: FetchHistoryInput,
+): Promise<FetchHistoryByCategoryData[] | undefined> => {
+  const { data } = await Axios.get<FetchHistoryByCategoryOutput>(
+    `/transaction/historyByCategory?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
+  );
+  if (!data.ok) alert(data.error);
+  console.log(data.data);
   return data.data;
 };
