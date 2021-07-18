@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { darkTheme, GlobalStyles, lightTheme } from './styles/styles';
 import Home from './pages/Home';
@@ -19,6 +19,12 @@ function App() {
       <HelmetProvider>
         <GlobalStyles />
         <Switch>
+          {!isLoggedIn ? (
+            <Route path={routes.signUp}>
+              <SignUp darkModeInput={[isDarkTheme, toggleDarkMode]} />
+            </Route>
+          ) : null}
+
           <Route path={routes.home}>
             {isLoggedIn ? (
               <Home darkModeInput={[isDarkTheme, toggleDarkMode]} />
@@ -29,12 +35,6 @@ function App() {
               />
             )}
           </Route>
-
-          {!isLoggedIn ? (
-            <Route path={routes.signUp}>
-              <SignUp darkModeInput={[isDarkTheme, toggleDarkMode]} />
-            </Route>
-          ) : null}
 
           <Route>
             <NotFound />
