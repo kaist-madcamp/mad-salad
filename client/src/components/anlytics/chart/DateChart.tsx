@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 import { Line } from 'react-chartjs-2';
 import styled from 'styled-components';
-import { fetchHistoryAPI } from '../../lib/api/history';
+import { fetchHistoryAPI } from '../../../lib/api/history';
 import { Notification } from './CategoryChart';
-import { FetchHistoryData } from '../../lib/api/types';
+import { FetchHistoryData } from '../../../lib/api/types';
 
 interface Props {
   selectedDate: { year: number; month: number };

@@ -1,9 +1,9 @@
-import { fetchHistoryByCategoryAPI } from '../../lib/api/history';
+import { fetchHistoryByCategoryAPI } from '../../../lib/api/history';
 import styled, { keyframes } from 'styled-components';
 import { Pie } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { priceToString } from '../../lib/helper';
-import { FetchHistoryByCategoryData } from '../../lib/api/types';
+import { priceToString } from '../../../lib/helper';
+import { FetchHistoryByCategoryData } from '../../../lib/api/types';
 
 interface Props {
   selectedDate: { year: number; month: number };
@@ -21,10 +21,10 @@ export default function CategoryChart({ selectedDate }: Props) {
   );
 
   const dataForPie = {
-    labels: historyData?.map((el) => el.category),
+    labels: historyData?.map((el) => el.categoryName),
     datasets: [
       {
-        data: historyData?.map((el) => el._sum.amount),
+        data: historyData?.map((el) => el.amount),
         backgroundColor: historyData?.map((_, idx) => pieBackgroundColor[idx]),
         borderWidth: 0,
       },
@@ -36,7 +36,7 @@ export default function CategoryChart({ selectedDate }: Props) {
   if (isLoading) return <Notification>Loading...</Notification>;
   if (error) return <Notification>Error..</Notification>;
 
-  const totalSum = historyData?.reduce((acc, el) => acc + el._sum.amount, 0);
+  const totalSum = historyData?.reduce((acc, el) => acc + el.amount, 0);
   return (
     <>
       <PolarCharWrapper>
@@ -52,22 +52,18 @@ export default function CategoryChart({ selectedDate }: Props) {
       </PolarCharWrapper>
       <Container>
         {historyData.map((el) => {
-          console.log(el._sum.amount);
+          console.log(el.amount);
           return (
-            <Row key={el.category}>
-              <Column className="categoryName">{el.category}</Column>
+            <Row key={el.categoryName}>
+              <Column className="categoryName">{el.categoryName}</Column>
               <Column className="percent">{`${(
-                (el._sum.amount / totalSum) *
+                (el.amount / totalSum) *
                 100
               ).toFixed(2)}%`}</Column>
               <Column className="bar">
-                <Bar
-                  width={`${((el._sum.amount / totalSum) * 100).toFixed(2)}%`}
-                />
+                <Bar width={`${((el.amount / totalSum) * 100).toFixed(2)}%`} />
               </Column>
-              <Column className="amount">
-                {priceToString(el._sum.amount)}
-              </Column>
+              <Column className="amount">{priceToString(el.amount)}</Column>
             </Row>
           );
         })}
