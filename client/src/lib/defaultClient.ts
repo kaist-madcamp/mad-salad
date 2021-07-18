@@ -4,9 +4,9 @@ import { TOKEN } from '../hooks/useLogin';
 const token = localStorage.getItem(TOKEN);
 
 const Axios: AxiosInstance = axios.create({
-  baseURL: 'https://back.xircle.org',
+  baseURL: 'http://172.10.18.176',
   headers: {
-    token: token,
+    authorization: token,
   },
 });
 
