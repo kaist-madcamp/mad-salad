@@ -40,26 +40,29 @@ export default function SignUp({ darkModeInput }: Props) {
     console.log(data);
     const { email, name, password } = data;
     try {
-      const response = await mutateAsync({
+      const res = await mutateAsync({
         email,
         name,
         password,
       });
-      console.log(response);
-      history.push(routes.home, {
-        message: '계정이 생성되었습니다. 로그인 해주세요.',
-        email,
-        password,
-      });
+      console.log(res);
+      if (res.data.ok) {
+        history.push(routes.home, {
+          message: '계정이 생성되었습니다. 로그인 해주세요.',
+          email,
+          password,
+        });
+      } else {
+        alert(res.data.error);
+      }
     } catch (error) {
-      console.log(error);
       alert(error);
     }
   };
 
   return (
     <AuthLayout darkModeInput={darkModeInput}>
-      <PageTitle title="Sign up | 금융 앱" />
+      <PageTitle title="Sign up" />
       <FormBox>
         <Title>금융 앱</Title>
         <h2>나의 돈을 시각화, 직관화!</h2>

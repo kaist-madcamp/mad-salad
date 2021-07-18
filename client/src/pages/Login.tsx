@@ -53,16 +53,15 @@ export default function Login({ darkModeInput, useAuthHookInput }: Props) {
     console.log(data);
     const { email, password } = data;
     try {
-      const response = await mutateAsync({
+      const res = await mutateAsync({
         email,
         password,
       });
-      console.log(response);
-      // if (response.token!) {
-      //   useAuthHookInput[1](token);
-      // } else {
-      //   setReqErrorMessage(response.error);
-      // }
+      if (res.data.ok) {
+        useAuthHookInput[1](res.data.token);
+      } else {
+        setReqErrorMessage(res.data.error!);
+      }
     } catch (error) {
       console.log(error);
       alert(error);
