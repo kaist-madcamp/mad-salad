@@ -1,28 +1,15 @@
+import { CoreOutput } from '../CoreOutput';
 import Axios from '../defaultClient';
-
-interface CreateUserInput {
-  email: string;
-  name: string;
-  password: string;
-}
-
-interface LoginUserInput {
-  email: string;
-  password: string;
-}
+import { CreateUserInput, LoginUserInput, LoginUserOutput } from './types';
 
 export const createUserAPI = async (createUserInput: CreateUserInput) => {
-  const response = await Axios.post('/user/join', {
+  return Axios.post<CoreOutput>('/user/join', {
     ...createUserInput,
   });
-  console.log(response);
-  return response;
 };
 
 export const loginUserAPI = async (loginUserInput: LoginUserInput) => {
-  const response = await Axios.post('/user/login', {
+  return Axios.post<LoginUserOutput>('/auth/login', {
     ...loginUserInput,
   });
-  console.log(response);
-  return response;
 };
