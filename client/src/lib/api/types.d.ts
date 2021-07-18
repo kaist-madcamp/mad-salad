@@ -10,7 +10,6 @@ interface LoginUserInput {
   email: string;
   password: string;
 }
-
 interface LoginUserOutput extends CoreOutput {
   token?: string;
 }
@@ -30,17 +29,33 @@ export interface FetchHistoryData {
   content: string;
   createdAt: string;
 }
-
 export interface FetchHistoryOutput extends CoreOutput {
   data: FetchHistoryData[];
 }
 
 export interface FetchHistoryByCategoryData {
-  category: number;
-  _sum: {
-    amount: number;
-  };
+  categoryId: number;
+  amount: number;
+  categoryName: string;
 }
 export interface FetchHistoryByCategoryOutput extends CoreOutput {
   data: FetchHistoryByCategoryData[];
+}
+
+export interface FetchHistoryByCreatedAtData {
+  id: number;
+  accountId: number;
+  type: 'INCOME' | 'EXPENDITURE' | 'RECEIVE' | 'SEND';
+  content: string;
+  createdAt: string;
+  amount: number;
+  categoryId: number;
+  accountSubId: number;
+  userId: number;
+  account: {
+    name: string;
+  }
+}
+export interface FetchHistoryByCreatedAtOutput extends CoreOutput {
+  data: FetchHistoryByCreatedAtData[][];
 }
