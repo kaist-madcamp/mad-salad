@@ -1,4 +1,3 @@
-import SumIndicatorWrapper from '../components/anlytics/SumIndicatorWrapper';
 import PageTitle from '../components/PageTitle';
 
 export default function Calendar() {
@@ -6,7 +5,6 @@ export default function Calendar() {
     <div>
       <PageTitle title="Calendar" />
       <h1>Calendar</h1>
-      <SumIndicatorWrapper />
     </div>
   );
 }

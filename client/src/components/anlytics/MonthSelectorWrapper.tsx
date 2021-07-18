@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FetchHistoryInput } from '../../lib/api/history';
+import { FetchHistoryInput } from '../../lib/api/types.d';
 
 interface Props {
   onClicked: (data: FetchHistoryInput) => void;
