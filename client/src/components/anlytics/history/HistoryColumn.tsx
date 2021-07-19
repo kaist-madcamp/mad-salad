@@ -1,14 +1,18 @@
 import styled from 'styled-components';
+import React from 'react';
+import { dateWithDay } from '../../../lib/helper';
 
 interface Props {
   children: React.ReactNode;
-  createdAt?: string;
+  createdAt: string;
 }
 
 export default function HistoryColumn({ children, createdAt }: Props) {
+  if (React.Children.toArray(children).length === 0) return null;
+
   return (
     <Column>
-      <DateIndicator>THU, 6th</DateIndicator>
+      <DateIndicator>{dateWithDay(createdAt)}</DateIndicator>
       {children}
     </Column>
   );
