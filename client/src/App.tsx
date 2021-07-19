@@ -9,39 +9,42 @@ import NotFound from './pages/NotFound';
 import { ThemeProvider } from 'styled-components';
 import useAuth from './hooks/useLogin';
 import useDarkMode from './hooks/useDarkmode';
+import { PortalProvider } from './providers/PortalProvider';
 
 function App() {
   const [isDarkTheme, toggleDarkMode] = useDarkMode();
   const [isLoggedIn, toggleLogInOut] = useAuth();
 
   return (
-    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-      <HelmetProvider>
-        <GlobalStyles />
-        <Switch>
-          {!isLoggedIn ? (
-            <Route path={routes.signUp}>
-              <SignUp darkModeInput={[isDarkTheme, toggleDarkMode]} />
+    <PortalProvider>
+      <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+        <HelmetProvider>
+          <GlobalStyles />
+          <Switch>
+            {!isLoggedIn ? (
+              <Route path={routes.signUp}>
+                <SignUp darkModeInput={[isDarkTheme, toggleDarkMode]} />
+              </Route>
+            ) : null}
+
+            <Route path={routes.home}>
+              {isLoggedIn ? (
+                <Home darkModeInput={[isDarkTheme, toggleDarkMode]} />
+              ) : (
+                <Login
+                  useAuthHookInput={[isLoggedIn, toggleLogInOut]}
+                  darkModeInput={[isDarkTheme, toggleDarkMode]}
+                />
+              )}
             </Route>
-          ) : null}
 
-          <Route path={routes.home}>
-            {isLoggedIn ? (
-              <Home darkModeInput={[isDarkTheme, toggleDarkMode]} />
-            ) : (
-              <Login
-                useAuthHookInput={[isLoggedIn, toggleLogInOut]}
-                darkModeInput={[isDarkTheme, toggleDarkMode]}
-              />
-            )}
-          </Route>
-
-          <Route>
-            <NotFound />
-          </Route>
-        </Switch>
-      </HelmetProvider>
-    </ThemeProvider>
+            <Route>
+              <NotFound />
+            </Route>
+          </Switch>
+        </HelmetProvider>
+      </ThemeProvider>
+    </PortalProvider>
   );
 }
 
