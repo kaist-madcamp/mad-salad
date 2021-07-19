@@ -9,6 +9,7 @@ interface Props {
   amount?: number;
   createdAt?: string;
   accountName: string;
+  onClicked: () => void;
 }
 
 export default function HistoryRow({
@@ -16,9 +17,10 @@ export default function HistoryRow({
   type,
   amount,
   accountName,
+  onClicked,
 }: Props) {
   return (
-    <Row>
+    <Row onClick={onClicked}>
       <HistoryCard>
         <Front>
           <Payment>{accountName}</Payment>
@@ -46,7 +48,7 @@ const HistoryCard = styled.div`
   padding: 1.4375rem 1.9375rem;
   height: 5.4375rem;
   width: 100%;
-  background: #333;
+  background: ${(props) => props.theme.itemRowBgColor};
   border-radius: 1.25rem;
   margin-bottom: 1.0625rem;
   cursor: pointer;
@@ -69,7 +71,7 @@ const Content = styled.div`
   font-size: 1.25rem;
   line-height: 1.5rem;
   margin-top: 0.1875rem;
-  color: #f0f0f0;
+  color: ${(props) => props.theme.itemRowColor};
 `;
 
 const Back = styled.div`
