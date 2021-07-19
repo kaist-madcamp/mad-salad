@@ -25,7 +25,7 @@ export interface FetchHistoryData {
   accountId: number;
   accoundSubId: number;
   amount: number;
-  type: string;
+  type: 'INCOME' | 'EXPENDITURE' | 'RECEIVE' | 'SEND';
   content: string;
   createdAt: string;
 }
@@ -54,8 +54,42 @@ export interface FetchHistoryByCreatedAtData {
   userId: number;
   account: {
     name: string;
-  }
+  };
 }
 export interface FetchHistoryByCreatedAtOutput extends CoreOutput {
   data: FetchHistoryByCreatedAtData[][];
+}
+
+export interface GetAllAccountData {
+  id: number;
+  balance: number;
+  name: string;
+  type: string;
+  userId: number;
+  version: number;
+}
+
+export interface GetAllAccountOutput extends CoreOutput {
+  data: GetAllAccountData[];
+}
+
+export interface GetAllCategoriesData {
+  id: number;
+  name: string;
+  budget: number;
+  type: 'EXPENDITURE' | 'INCOME' | 'RECEIVE' | 'SEND';
+}
+export interface GetAllCategoriesOutput extends CoreOutput {
+  data: GetAllCategoiesData[];
+}
+
+export interface DefaultHistoryData {
+  transactionId: number;
+  accountName: string;
+  accountId: number;
+  amount: number;
+  label: string;
+  createdAt: string;
+  type: 'EXPENDITURE' | 'INCOME' | 'RECEIVE' | 'SEND';
+  categoryId: number;
 }
