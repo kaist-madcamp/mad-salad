@@ -93,9 +93,11 @@ const AnalyticsOptionBtn = styled(button)<{ checked: boolean }>`
   font-size: 1.25rem;
   padding: 0.8125rem;
   color: ${(props) =>
-    props.checked ? props.theme.checkedColor : props.theme.color};
+    props.checked ? props.theme.selectedColor : props.theme.unselectedColor};
   background-color: ${(props) =>
-    props.checked ? props.theme.checkedBgColor : props.theme.uncheckedBgColor};
+    props.checked
+      ? props.theme.selectedBgColor
+      : props.theme.unselectedBgColor};
   transition: background-color 0.2s ease, color 0.2s ease;
 `;
 

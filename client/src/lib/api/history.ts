@@ -15,7 +15,9 @@ export const fetchHistoryAPI = async (
   const { data } = await Axios.get<FetchHistoryOutput>(
     `/transaction/history?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
-  if (!data.ok) alert(data.error);
+  if (!data.ok) {
+    console.log(data.error);
+  }
   console.log(data.data);
   return data.data;
 };
@@ -26,7 +28,10 @@ export const fetchHistoryByCategoryAPI = async (
   const { data } = await Axios.get<FetchHistoryByCategoryOutput>(
     `/transaction/historyByCategory?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
-  if (!data.ok) alert(data.error);
+  if (!data.ok) {
+    console.log(data.error)
+    // alert(data.error);
+  }
   console.log(data.data);
   return data.data;
 };
@@ -37,7 +42,9 @@ export const fetchHistoryByCreatedAtAPI = async (
   const { data } = await Axios.get<FetchHistoryByCreatedAtOutput>(
     `/transaction/historyByCreatedAt?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
-  if (!data.ok) alert(data.error);
+  if (!data.ok) {
+    console.log(data.error);
+  }
   console.log(data.data);
   return data.data;
 };

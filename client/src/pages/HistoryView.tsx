@@ -14,15 +14,13 @@ import {
 } from '../lib/api/history';
 import { Notification } from '../components/anlytics/chart/CategoryChart';
 
-interface Props {}
-
 export enum SumIndicatorType {
   DEFAULT = 'DEFAULT',
   INCOME = 'INCOME',
   EXPENDITURE = 'EXPENDITURE',
 }
 
-export default function HistoryView(props: Props) {
+export default function HistoryView() {
   const [selectedDate, setSelectedDate] = useState<FetchHistoryInput>({
     year: 2021,
     month: 7,

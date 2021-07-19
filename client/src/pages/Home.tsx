@@ -16,6 +16,9 @@ export default function Home({ darkModeInput }: Props) {
       <PageTitle title="Home" />
       <Navigation>
         <button onClick={darkModeInput[1]}>mode 변경</button>
+        <Link to={routes.home}>
+          <p>홈</p>
+        </Link>
         <Link to={routes.calendar}>
           <p>캘린더</p>
         </Link>
@@ -45,8 +48,6 @@ const Container = styled.div`
   background-image: ${(props) => props.theme.backgroundImage};
   background-attachment: ${(props) => props.theme.backgroundAttachment};
 `;
-
-const Wrapper = styled.div``;
 
 const Navigation = styled.nav`
   display: flex;
