@@ -7,11 +7,12 @@ declare module 'styled-components' {
     bgColor?: string;
     borderColor?: string;
     color?: string;
-    checkedColor?: string;
-    checkedBgColor?: string;
+    selectedColor?: string;
+    selectedBgColor?: string;
+    unselectedBgColor?: string;
+    unselectedColor?: string;
     backgroundImage?: string;
     backgroundAttachment?: string;
-    uncheckedBgColor?: string;
     itemRowBgColor?: string;
     itemRowColor?: string;
   }
