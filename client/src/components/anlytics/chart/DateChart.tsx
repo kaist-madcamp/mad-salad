@@ -43,7 +43,11 @@ const DateChart = ({ selectedDate }: Props) => {
     ],
   };
 
-  if (!historyData || historyData?.length === 0)
+  if (
+    !historyData ||
+    historyData?.length === 0 ||
+    zeroArr.reduce((acc, el) => (acc += el), 0) === 0
+  )
     return <Notification>No expenditures this month</Notification>;
 
   if (isLoading) return <Notification>Loading...</Notification>;
