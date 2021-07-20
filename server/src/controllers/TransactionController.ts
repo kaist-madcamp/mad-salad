@@ -352,6 +352,18 @@ class TransactionController {
     }
 
     static receive = async (req:Request, res:Response)=>{
+        const token = <string>req.headers["authorization"];
+        let jwtPayload;
+        try {
+            jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+        } catch (error) {
+            res.status(200).json({
+                ok: false,
+                error: "invalid token"
+            });
+            return;
+        }
+        const { userId } = jwtPayload
         const {transactionId, reply} = req.body
         if(!(transactionId&&reply)){
             res.json({
@@ -369,8 +381,12 @@ class TransactionController {
 
        if(!tran){
             res.json({
-                ok:false, error:"no transaction Id. this should not happen"
+                ok:false, error:"no transaction Id  this should not happen"
             })
+            return
+        }
+        if(tran.type!="PENDING" || tran.userId!=+userId){
+            res.json({ok:false,error:"transaction type is not pending or transaction owner is not userId"})
             return
         }
         const receiverAccountId :number = tran.accountId
@@ -873,6 +889,40 @@ class TransactionController {
             ok: true,
             data: resultTras
         })
+    }
+
+    static getPendingTransactions = async (req: Request, res:Response)=>{
+        const token = <string>req.headers["authorization"];
+        let jwtPayload;
+        try {
+            jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+        } catch (error) {
+            res.status(200).json({
+                ok: false,
+                error: "invalid token"
+            });
+            return;
+        }
+        const { userId } = jwtPayload
+        
+        const pendingTransactions = await user.findUnique({
+            where:{
+                id:userId
+            },
+            include:{
+                transactions: {
+                    where:{
+                        type : "PENDING"
+                    }
+                }
+            }
+        })
+        if(!pendingTransactions){
+            res.json({ok:false, error:"user findUnique failed"})
+            return
+        }
+        res.json({ok:true, data:pendingTransactions.transactions})
+
     }
 }
 

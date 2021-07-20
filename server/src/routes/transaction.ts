@@ -26,4 +26,6 @@ router.get("/historyByCategory", [checkJwt, checkUser], TransactionController.hi
 
 router.get("/historyByCreatedAt", [checkJwt, checkUser], TransactionController.historyGroupByCreatedAt)
 
+router.get("/getPending", [checkJwt, checkUser], TransactionController.getPendingTransactions)
+
 export default router;
