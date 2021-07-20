@@ -14,7 +14,7 @@ router.post("/expenditure/:accountId", [checkJwt, checkUser, checkUserOwnAccount
 
 router.post("/send/:accountId", [checkJwt, checkUser, checkUserOwnAccount], TransactionController.send)
 
-router.post("/receive", [checkJwt, checkUser], TransactionController.receive)
+router.post("/receive", [checkJwt, checkUser,checkUserOwnTrans], TransactionController.receive)
 
 router.put("/updateOne", [checkJwt, checkUser, checkUserOwnTrans], TransactionController.updateOneTransaction)
 

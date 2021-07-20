@@ -352,18 +352,6 @@ class TransactionController {
     }
 
     static receive = async (req:Request, res:Response)=>{
-        const token = <string>req.headers["authorization"];
-        let jwtPayload;
-        try {
-            jwtPayload = <any>jwt.verify(token, config.jwtSecret);
-        } catch (error) {
-            res.status(200).json({
-                ok: false,
-                error: "invalid token"
-            });
-            return;
-        }
-        const { userId } = jwtPayload
         const {transactionId, reply} = req.body
         if(!(transactionId&&reply)){
             res.json({
@@ -385,8 +373,8 @@ class TransactionController {
             })
             return
         }
-        if(tran.type!="PENDING" || tran.userId!=+userId){
-            res.json({ok:false,error:"transaction type is not pending or transaction owner is not userId"})
+        if(tran.type!="PENDING"){
+            res.json({ok:false,error:"transaction type is not pending"})
             return
         }
         const receiverAccountId :number = tran.accountId
@@ -722,8 +710,6 @@ class TransactionController {
         })
     }
 
-
-
     static historyGroupByCategory = async (req: Request, res: Response) => {
         const token = <string>req.headers["authorization"];
         let jwtPayload;
@@ -921,7 +907,7 @@ class TransactionController {
             res.json({ok:false, error:"user findUnique failed"})
             return
         }
-        res.json({ok:true, data:pendingTransactions.transactions})
+        res.json({ok:true, data:pendingTransactions.transactions, length:pendingTransactions.transactions.length})
 
     }
 }
