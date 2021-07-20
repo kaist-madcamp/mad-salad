@@ -77,6 +77,7 @@ export const Notification = styled.span`
   font-weight: 500;
   display: block;
   text-align: center;
+  margin-top: 30px;
 `;
 
 const slide = keyframes`

@@ -49,6 +49,7 @@ const HistoryCard = styled.div`
   height: 5.4375rem;
   width: 100%;
   background: ${(props) => props.theme.itemRowBgColor};
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   border-radius: 1.25rem;
   margin-bottom: 1.0625rem;
   cursor: pointer;

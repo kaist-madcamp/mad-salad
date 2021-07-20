@@ -3,7 +3,7 @@ import { GetAllCategoriesData } from '../../../lib/api/types';
 
 interface Props {
   pickedCategory: string;
-  pickedType: 'expenditure' | 'income';
+  pickedType: 'expenditure' | 'income' | 'receive' | 'send';
   onClicked: (category: string) => void;
   allCategoryData: GetAllCategoriesData[];
 }
@@ -15,10 +15,11 @@ export default function HistoryCategoryContainer({
   allCategoryData,
 }: Props) {
   if (!allCategoryData) return <p>카테고리가 존재하지 않습니다.</p>;
+
   return (
     <>
       {allCategoryData?.map((cat) => {
-        if (cat.type.toLowerCase() !== pickedType) return;
+        if (cat.type.toLowerCase() !== pickedType.toLowerCase()) return;
         return (
           <CategoryIndicator
             key={cat.name}

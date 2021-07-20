@@ -7,6 +7,7 @@ const commonTheme = {
 
 export const lightTheme: DefaultTheme = {
   ...commonTheme,
+  opositeColor: '#000',
   bgColor: '#fafafa',
   borderColor: 'rgb(219, 219, 219)',
   color: 'rgb(38, 38, 38)',
@@ -19,9 +20,13 @@ export const lightTheme: DefaultTheme = {
 
   itemRowColor: '#333',
   itemRowBgColor: '#f0f0f0',
+
+  linearGradientLeft: 'linear-gradient(to left, darkgray, white)',
+  linearGradientRight: 'linear-gradient(to left, darkgray, white)',
 };
 export const darkTheme: DefaultTheme = {
   ...commonTheme,
+  opositeColor: '#fff',
   bgColor: '#000',
   borderColor: '#1c1c1c',
   color: '#fff',
@@ -37,6 +42,9 @@ export const darkTheme: DefaultTheme = {
 
   itemRowBgColor: '#333',
   itemRowColor: '#fff',
+
+  linearGradientLeft: 'linear-gradient(to right, #333 30%, #aaa)',
+  linearGradientRight: 'linear-gradient(to left, #333 30%, #aaa)',
 };
 
 export const GlobalStyles = createGlobalStyle`
