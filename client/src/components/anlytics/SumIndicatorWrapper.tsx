@@ -68,7 +68,7 @@ export default function SumIndicatorWrapper({
 }
 
 const Container = styled.div`
-  margin: 3.375rem auto;
+  margin: 30px auto;
   width: calc(100% - 1.875rem);
   max-width: 36.75rem;
 `;
