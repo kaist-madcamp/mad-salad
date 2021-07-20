@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import config from "../config/config";
 import { PrismaClient, Transaction } from '.prisma/client'
-import { AcctType, TransType } from "@prisma/client";
-import { ESRCH } from "constants";
+import { TransType } from "@prisma/client";
+
 
 const prisma = new PrismaClient();
 
@@ -311,7 +311,9 @@ class TransactionController {
             })
             return
         }
-
+        console.log("let me see")
+        console.log(amount)
+        console.log(+amount)
         const newBalance = acct.balance - (+amount)
         if (newBalance < 0) {
             res.json({
@@ -434,9 +436,9 @@ class TransactionController {
             return
         }
 
-        const senerBalance = acct.balance - (tran.amount)
-        const receiveralance = acctSub.balance + (tran.amount)
-        if (senerBalance < 0) {
+        const senderBalance = acct.balance - (tran.amount)
+        const receiverBalance = acctSub.balance + (tran.amount)
+        if (senderBalance < 0) {
 
             try{
                 await transaction.delete({
@@ -462,7 +464,7 @@ class TransactionController {
                 version: acct.version
             },
             data: {
-                balance: senerBalance,
+                balance: senderBalance,
                 version: {
                     increment: 1
                 },
@@ -475,7 +477,7 @@ class TransactionController {
                 version: acctSub.version
             },
             data: {
-                balance: receiveralance,
+                balance: receiverBalance,
                 version: {
                     increment: 1
                 },
@@ -514,14 +516,6 @@ class TransactionController {
             })
             return
         } 
-        /*try{
-            await prisma.$transaction([newAcctSub, transSub])
-        }catch(error){
-            res.json({
-                ok:false, error:"creating failed. try 1 more time, or deny it"
-            })
-            return
-        }*/
 
         res.json({
             ok: true
@@ -907,8 +901,11 @@ class TransactionController {
             res.json({ok:false, error:"user findUnique failed"})
             return
         }
-        res.json({ok:true, data:pendingTransactions.transactions, length:pendingTransactions.transactions.length})
-
+        if(pendingTransactions.transactions.length==0){
+            res.json({ok:true})
+        }else{
+            res.json({ok:true, data:pendingTransactions.transactions[0]})
+        }
     }
 }
 

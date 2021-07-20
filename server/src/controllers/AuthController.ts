@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-//import { validate } from "class-validator";
 import config from "../config/config";
 import { PrismaClient } from '.prisma/client'
 import bcrypt from "bcrypt"

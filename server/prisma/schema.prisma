@@ -65,8 +65,7 @@ model Transaction {
 
 model Category{
   id Int @default(autoincrement()) @id
-  //user User? @relation(fields: [userId], references:[id])
-  //userId Int?
+
   users User[]
   name String @unique
   budget Int @default(0)

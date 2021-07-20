@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
-import config from "../config/config";
 import { PrismaClient } from '.prisma/client'
 import bcrypt from "bcrypt"
 
@@ -86,8 +84,6 @@ class UserController {
     }
 
   static unroll = async (req:Request, res:Response)=>{
-    console.log("/api/user/unroll")
-    console.log(req.body)
     const{email, password} = req.body
 
     const userExist  = await user.findUnique({
