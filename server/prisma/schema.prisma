@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["orderByAggregateGroup"]
+}
+
+model User {
+  id      Int      @default(autoincrement()) @id
+  email String @unique 
+  password  String 
+  
+  name    String?
+
+  accts Account[]
+  categories Category[]
+
+  transactions Transaction[] @relation()
+}
+
+model Account {
+  id Int @default(autoincrement()) @id
+  balance Int @default(0)
+  name String 
+  type AcctType
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  transactions Transaction[] @relation(name: "TransMainAcct")
+  transactionsSub Transaction[] @relation(name: "TransSubAcct")//I dont need this
+  version Int @default(0)
+
+
+  @@unique([userId,name])
+  @@unique([name,userId], name: "acctIdx")
+}
+
+model Transaction {
+  id Int @default(autoincrement()) @id
+  account Account @relation(name: "TransMainAcct",fields: [accountId], references: [id])
+  accountId Int
+  type TransType
+  content String?
+  createdAt DateTime @default(now())
+  amount Int
+
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  
+  
+  acctSub Account? @relation(name: "TransSubAcct", fields: [accountSubId], references: [id])  //I dont wanna use this maybe I don't need this
+  accountSubId Int?
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+}
+
+model Category{
+  id Int @default(autoincrement()) @id
+  //user User? @relation(fields: [userId], references:[id])
+  //userId Int?
+  users User[]
+  name String @unique
+  budget Int @default(0)
+  type CategoryType @default(EXPENDITURE)
+
+  transactions Transaction[]
+
+}
+
+enum AcctType { 
+  CHECKING  @map("CHECKING")
+  SAVING @map("SAVING")
+}
+
+enum TransType {
+  SEND @map("SEND")
+  RECEIVE @map("RECEIVE")
+  EXPENDITURE @map("EXPENDITURE")
+  INCOME @map("INCOME")
+}
+enum CategoryType {
+  EXPENDITURE @map("EXPENDITURE")
+  INCOME @map("INCOME")
+}
+
+//prisma enum string https://github.com/prisma/prisma/discussions/2732
