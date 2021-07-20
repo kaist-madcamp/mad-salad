@@ -313,7 +313,6 @@ class TransactionController {
         }
 
         const newBalance = acct.balance - (+amount)
-        const newSubBalance = acctSub.balance + (+amount)
         if (newBalance < 0) {
             res.json({
                 ok: false,
@@ -322,80 +321,13 @@ class TransactionController {
             return
         }
 
-        let newAcct
+
+       
         try {
-            newAcct = account.updateMany({
-                where: {
-                    id: +accountId,
-                    version: acct.version
-                },
-                data: {
-                    balance: newBalance,
-                    version: {
-                        increment: 1
-                    },
-                }
-
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: "account update failed"
-            })
-            return
-        }
-
-        let newAcctSub;
-        try {
-            newAcctSub = account.updateMany({
-                where: {
-                    id: +accountSubId,
-                    version: acctSub.version
-                },
-                data: {
-                    balance: newSubBalance,
-                    version: {
-                        increment: 1
-                    },
-                }
-
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: "accountSub update failed"
-            })
-            return
-        }
-
-        let trans;
-        try {
-            trans = transaction.create({
-                data: {
-                    accountId: +accountId,
-                    type: "SEND",
-                    amount: +amount,
-                    categoryId: categoryExist.id,
-                    accountSubId: +accountSubId,
-                    content,
-                    userId: acct.userId,
-                    createdAt: createDate
-                }
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: "trans create failed"
-            })
-            return
-        }
-
-        let transSub;
-        try {
-            transSub = transaction.create({
+            const trans = await transaction.create({
                 data: {
                     accountId: +accountSubId,
-                    type: "RECEIVE",
+                    type: "PENDING",  //this should be receive transaction
                     amount: +amount,
                     categoryId: categoryExist.id,
                     accountSubId: +accountId,
@@ -404,16 +336,188 @@ class TransactionController {
                     createdAt: createDate
                 }
             })
+            console.log(trans)
         } catch (error) {
             res.json({
                 ok: false,
-                error: "transSub create failed"
+                error: "trans create failed"
             })
             return
         }
 
-        prisma.$transaction([newAcct, newAcctSub, trans, transSub])
 
+        res.json({
+            ok: true
+        })
+    }
+
+    static receive = async (req:Request, res:Response)=>{
+        const {transactionId, reply} = req.body
+        if(!(transactionId&&reply)){
+            res.json({
+                ok:false,error:"null parameters"
+            })
+            return
+        }
+
+       const tran = await transaction.findUnique({
+           where:{
+            id: +transactionId
+            }
+       })
+
+
+       if(!tran){
+            res.json({
+                ok:false, error:"no transaction Id. this should not happen"
+            })
+            return
+        }
+        const receiverAccountId :number = tran.accountId
+        const senderAccountId :number= tran.accountSubId
+
+        //if userSub dont want this transaction
+        if(reply=="DENY") {
+            try{
+                await transaction.delete({
+                    where:{
+                        id: + transactionId
+                    }
+                })
+            }catch(error){
+                res.json({ok:false,error:"transaction delete failed"})
+                return
+            }
+            res.json({ok:true, error:"transactions is denied by user"})
+            return
+        }
+
+
+        //receiver
+        const acctSub = await account.findUnique({
+            where: {
+                id: receiverAccountId
+            },
+            select: {
+                balance: true,
+                version: true,
+                userId: true
+            }
+        })
+        if (!acctSub) {
+            res.json({
+                ok: false,
+                error: "no such accountId. deny it"
+            })
+            return
+        }
+        //sender
+        const acct = await account.findUnique({
+            where: {
+                id: senderAccountId
+            },
+            select: {
+                balance: true,
+                version: true,
+                userId: true
+            }
+        })
+        if (!acct) {
+            res.json({
+                ok: false,
+                error: "no such accountSubId, deny it"
+            })
+            return
+        }
+
+        const senerBalance = acct.balance - (tran.amount)
+        const receiveralance = acctSub.balance + (tran.amount)
+        if (senerBalance < 0) {
+
+            try{
+                await transaction.delete({
+                    where:{
+                        id: + transactionId
+                    }
+                })
+            }catch(error){
+                res.json({ok:false,error:"transaction delete failed, deny it"})
+                return
+            }
+
+            res.json({
+                ok: false,
+                error: "not enough balance. pending transaction is deleted."
+            })
+            return
+        }
+        //sender
+        const newAcct= account.updateMany({
+            where: {
+                id: senderAccountId,
+                version: acct.version
+            },
+            data: {
+                balance: senerBalance,
+                version: {
+                    increment: 1
+                },
+            }
+        })
+        //receiver
+        const newAcctSub = account.updateMany({
+            where: {
+                id: receiverAccountId,
+                version: acctSub.version
+            },
+            data: {
+                balance: receiveralance,
+                version: {
+                    increment: 1
+                },
+            }
+        })
+
+        const transSub = transaction.update({
+            where:{
+                id:+transactionId
+            },
+            data: {
+                type: "RECEIVE",
+                createdAt: new Date(),
+                categoryId: 10   //this should be fixed!!!!!!
+            }
+        })
+
+        const tranNew = transaction.create({
+            data: {
+                accountId: senderAccountId,
+                type: "SEND",
+                amount: tran.amount,
+                categoryId: tran.categoryId,
+                accountSubId: receiverAccountId,
+                content: tran.content,
+                userId: acctSub.userId,
+                createdAt: new Date()
+            }
+        })
+ 
+        try{
+            await prisma.$transaction([newAcct, newAcctSub,  tranNew, transSub])
+        }catch(error){
+            res.json({
+                ok:false, error:"creating failed. try 1 more time, or deny it"
+            })
+            return
+        } 
+        /*try{
+            await prisma.$transaction([newAcctSub, transSub])
+        }catch(error){
+            res.json({
+                ok:false, error:"creating failed. try 1 more time, or deny it"
+            })
+            return
+        }*/
 
         res.json({
             ok: true
@@ -581,6 +685,9 @@ class TransactionController {
                         createdAt: {
                             gte: new Date(date),
                             lt: new Date(nextDate) //have to check
+                        },
+                        type:{
+                            not: "PENDING"
                         }
                     },
                     orderBy: {
@@ -637,7 +744,7 @@ class TransactionController {
                     gte: new Date(date),
                     lt: new Date(nextDate) //have to check
                 },
-                type: { notIn: ["RECEIVE", "INCOME"] }
+                type: { notIn: ["RECEIVE", "INCOME","PENDING"] }
             },
             _sum: {
                 amount: true
@@ -713,6 +820,9 @@ class TransactionController {
                             gte: new Date(date),
                             lt: new Date(nextDate) //have to check
                         },
+                        type:{
+                            not:"PENDING"
+                        }
                     },
                     include: {
                         account: {

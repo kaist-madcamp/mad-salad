@@ -37,24 +37,26 @@ model Account {
 
 
   @@unique([userId,name])
-  @@unique([name,userId], name: "acctIdx")
+  //@@unique([name,userId], name: "acctIdx")
 }
 
 model Transaction {
   id Int @default(autoincrement()) @id
-  account Account @relation(name: "TransMainAcct",fields: [accountId], references: [id])
-  accountId Int
   type TransType
   content String?
   createdAt DateTime @default(now())
   amount Int
 
+
+
+  account Account @relation(name: "TransMainAcct",fields: [accountId], references: [id])
+  accountId Int
+  
   categoryId Int
   category Category @relation(fields: [categoryId], references: [id])
-  
-  
-  acctSub Account? @relation(name: "TransSubAcct", fields: [accountSubId], references: [id])  //I dont wanna use this maybe I don't need this
-  accountSubId Int?
+ 
+  acctSub Account @relation(name: "TransSubAcct", fields: [accountSubId], references: [id])  //I dont wanna use this maybe I don't need this
+  accountSubId Int
 
   user User @relation(fields: [userId], references: [id])
   userId Int
@@ -84,6 +86,7 @@ enum TransType {
   RECEIVE @map("RECEIVE")
   EXPENDITURE @map("EXPENDITURE")
   INCOME @map("INCOME")
+  PENDING @map("PENDING")
 }
 enum CategoryType {
   EXPENDITURE @map("EXPENDITURE")
