@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 import config from "../config/config";
 import { PrismaClient, Transaction } from '.prisma/client'
 import { AcctType, TransType } from "@prisma/client";
+import { ESRCH } from "constants";
 
 const prisma = new PrismaClient();
 
@@ -79,34 +80,21 @@ class TransactionController {
 
         const newBalance = acct.balance + (+amount)
 
-        let newAcct
-        try {
-            newAcct = account.updateMany({
-                where: {
-                    id: +accountId,
-                    version: acct.version
+        const newAcct = account.updateMany({
+            where: {
+                id: +accountId,
+                version: acct.version
+            },
+            data: {
+                balance: newBalance,
+                version: {
+                    increment: 1
                 },
+            }
+        })
+        const trans = transaction.create({
                 data: {
-                    balance: newBalance,
-                    version: {
-                        increment: 1
-                    },
-                }
-
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: "account update failed"
-            })
-            return
-        }
-
-        let trans;
-        try {
-            trans = transaction.create({
-                data: {
-                    accountId: +accountId,
+                    accountId: +accountId,                    
                     type: "INCOME",
                     amount: +amount,
                     categoryId: categoryExist.id,
@@ -116,16 +104,17 @@ class TransactionController {
                     createdAt: createDate
                 }
             })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: error
-            })
+
+
+
+
+        try{await prisma.$transaction([newAcct, trans])}
+        catch(error){
+            res.json({ok:false,error:"income transaction failed"})
             return
         }
 
-        prisma.$transaction([newAcct, trans])
-
+        
 
         res.json({
             ok: true
@@ -208,58 +197,46 @@ class TransactionController {
             return
         }
 
-        let newAcct
-        try {
-            newAcct = account.updateMany({
-                where: {
-                    id: +accountId,
-                    version: acct.version
+        const newAcct = account.updateMany({
+            where: {
+                id: +accountId,
+                version: acct.version
+            },
+            data: {
+                balance: newBalance,
+                version: {
+                    increment: 1
                 },
-                data: {
-                    balance: newBalance,
-                    version: {
-                        increment: 1
-                    },
-                }
+            }
+        })
 
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: "account update failed"
-            })
+
+        const trans = transaction.create({
+            data: {
+                accountId: +accountId,
+                type: "EXPENDITURE",
+                amount: +amount,
+                categoryId: categoryExist.id,
+                accountSubId: +accountId,
+                content,
+                userId: +userId,
+                createdAt: createDate
+            }
+        })
+
+
+        try{await prisma.$transaction([newAcct, trans])}
+        catch(error){
+            res.json({ok:false,error:"expenditure transaction failed"})
             return
         }
-
-        let trans;
-        try {
-            trans = transaction.create({
-                data: {
-                    accountId: +accountId,
-                    type: "EXPENDITURE",
-                    amount: +amount,
-                    categoryId: categoryExist.id,
-                    accountSubId: +accountId,
-                    content,
-                    userId: +userId,
-                    createdAt: createDate
-                }
-            })
-        } catch (error) {
-            res.json({
-                ok: false,
-                error: error
-            })
-            return//do I need this??
-        }
-
-        prisma.$transaction([newAcct, trans])
 
 
         res.json({
             ok: true
         })
     }
+
     static send = async (req: Request, res: Response) => {
         const { accountId } = req.params
         const { amount, categoryName, accountSubId, content, date } = req.body
