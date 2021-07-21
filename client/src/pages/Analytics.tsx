@@ -19,12 +19,15 @@ export default function Analytics() {
 
   return (
     <Container>
+      <PageTitle title="Analytics" />
+
+      <MonthSelectorWrapper
+        monthDate={selectedDate.month}
+        onClicked={MonthIndicatorClickedHandler}
+      />
+
+      {/* Option Navigator  */}
       <Wrapper>
-        <PageTitle title="Analytics" />
-
-        <MonthSelectorWrapper onClicked={MonthIndicatorClickedHandler} />
-
-        {/* Option Navigator  */}
         <AnalyticsOptions>
           <AnalyticsOptionBtn
             onClick={() => setAnalyticsOption('category')}
@@ -43,10 +46,10 @@ export default function Analytics() {
         {/* Chart Container */}
         {AnalyticsOption === 'category' ? (
           <CategorySection>
-            <CategoryChart selectedDate={selectedDate} />
+            <CategoryChart selectedDate={selectedDate!} />
           </CategorySection>
         ) : (
-          <DateChart selectedDate={selectedDate} />
+          <DateChart selectedDate={selectedDate!} />
         )}
       </Wrapper>
     </Container>
@@ -54,19 +57,13 @@ export default function Analytics() {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 70px 0px 0px;
 `;
 
 const Wrapper = styled.div`
-  width: 100%;
   width: calc(100% - 1.875rem);
   max-width: 36.75rem;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+  margin: 30px auto;
 `;
 
 const AnalyticsOptions = styled.div`
