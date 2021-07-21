@@ -1,0 +1,128 @@
+.transferModalBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(200, 200, 200, 0.5);
+    backdrop-filter: blur(1.875rem) saturate(1.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    overflow-y: scroll;
+}
+
+.transferModalContainer {
+    width: 500px;
+    /* height: 100vh; */
+    margin-top: 300px;
+    margin-bottom: 100px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.transferModalContainer .header {
+    flex: 50%;
+    display: flex;
+    font-size: 1.7rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.transferModalContainer .title {
+    display: inline-block;
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 1.7rem;
+}
+
+.titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.titleCloseBtn button {
+    background-color: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.transferModalContainer .body {
+    flex: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    text-align: center;
+    flex-direction: column;
+}
+
+.transferModalContainer .body .date {
+    margin-top: 30px;
+    margin-bottom: 45px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.transferModalContainer .body .category button {
+    padding: 0.4125rem 1.25rem;
+    margin: 0 0.8125rem 0.8125rem 0;
+    border: none;
+    background-color: #f5f5f5;
+    color: black;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.transferModalContainer .body .category button:focus {
+    background-color: #333333;
+    color: white;
+}
+
+.transferModalContainer .body .cardType {
+    margin: 30px;
+}
+
+.transferModalContainer .body .input {
+    margin: 10px;
+    border: none;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 5px 30px;
+}
+
+.transferModalContainer .footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.transferModalContainer .footer button {
+    width: 150px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    background-color: #0055ff;
+    color: white;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#sendBtn {
+    width: 300px;
+    height: 45px;
+}
