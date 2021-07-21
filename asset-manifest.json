@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/kaist-madcamp/mad-salad/static/css/main.85104d70.chunk.css",
+    "main.js": "/kaist-madcamp/mad-salad/static/js/main.f70c804f.chunk.js",
+    "main.js.map": "/kaist-madcamp/mad-salad/static/js/main.f70c804f.chunk.js.map",
+    "runtime-main.js": "/kaist-madcamp/mad-salad/static/js/runtime-main.a9a386bb.js",
+    "runtime-main.js.map": "/kaist-madcamp/mad-salad/static/js/runtime-main.a9a386bb.js.map",
+    "static/css/2.9aaf2cf1.chunk.css": "/kaist-madcamp/mad-salad/static/css/2.9aaf2cf1.chunk.css",
+    "static/js/2.9fbd238d.chunk.js": "/kaist-madcamp/mad-salad/static/js/2.9fbd238d.chunk.js",
+    "static/js/2.9fbd238d.chunk.js.map": "/kaist-madcamp/mad-salad/static/js/2.9fbd238d.chunk.js.map",
+    "index.html": "/kaist-madcamp/mad-salad/index.html",
+    "static/css/2.9aaf2cf1.chunk.css.map": "/kaist-madcamp/mad-salad/static/css/2.9aaf2cf1.chunk.css.map",
+    "static/css/main.85104d70.chunk.css.map": "/kaist-madcamp/mad-salad/static/css/main.85104d70.chunk.css.map",
+    "static/js/2.9fbd238d.chunk.js.LICENSE.txt": "/kaist-madcamp/mad-salad/static/js/2.9fbd238d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a9a386bb.js",
+    "static/css/2.9aaf2cf1.chunk.css",
+    "static/js/2.9fbd238d.chunk.js",
+    "static/css/main.85104d70.chunk.css",
+    "static/js/main.f70c804f.chunk.js"
+  ]
+}
