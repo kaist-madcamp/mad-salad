@@ -3,10 +3,13 @@ import styled, { keyframes } from 'styled-components';
 import { Pie } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
 import { priceToString } from '../../../lib/helper';
-import { FetchHistoryByCategoryData } from '../../../lib/api/types';
+import {
+  FetchHistoryByCategoryData,
+  FetchHistoryInput,
+} from '../../../lib/api/types';
 
 interface Props {
-  selectedDate: { year: number; month: number };
+  selectedDate: FetchHistoryInput;
 }
 
 export default function CategoryChart({ selectedDate }: Props) {
@@ -19,6 +22,8 @@ export default function CategoryChart({ selectedDate }: Props) {
       retry: 1,
     },
   );
+
+  console.log(selectedDate);
 
   const dataForPie = {
     labels: historyData?.map((el) => el.categoryName),

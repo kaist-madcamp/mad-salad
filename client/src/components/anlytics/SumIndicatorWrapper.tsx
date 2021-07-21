@@ -77,7 +77,7 @@ const SumIndicator = styled.div`
   display: flex;
 `;
 
-const MoneyButton = styled.div`
+export const MoneyButton = styled.div`
   --webkit-box-flex: 1;
   flex: auto;
   display: flex;
@@ -97,14 +97,14 @@ const MoneyButton = styled.div`
   cursor: pointer;
 `;
 
-const MoneyButtonIncome = styled(MoneyButton)<{ active: boolean }>`
+export const MoneyButtonIncome = styled(MoneyButton)<{ active?: boolean }>`
   margin-right: 0.9375rem;
   border: 0.1rem solid #54aafc;
   color: ${(props) => (props.active ? '#fff' : '#54aafc')};
   background-color: ${(props) => (props.active ? '#54aafc' : 'transparent')};
 `;
 
-const MoneyButtonExpenditure = styled(MoneyButton)<{ active: boolean }>`
+export const MoneyButtonExpenditure = styled(MoneyButton)<{ active?: boolean }>`
   border: 0.1rem solid #ee4337;
   color: ${(props) => (props.active ? '#fff' : '#ee4337')};
   background-color: ${(props) =>

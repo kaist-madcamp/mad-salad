@@ -23,6 +23,8 @@ export const lightTheme: DefaultTheme = {
 
   linearGradientLeft: 'linear-gradient(to left, darkgray, white)',
   linearGradientRight: 'linear-gradient(to left, darkgray, white)',
+
+  ModalHslaBgColor: '#fff'
 };
 export const darkTheme: DefaultTheme = {
   ...commonTheme,
@@ -45,6 +47,8 @@ export const darkTheme: DefaultTheme = {
 
   linearGradientLeft: 'linear-gradient(to right, #333 30%, #aaa)',
   linearGradientRight: 'linear-gradient(to left, #333 30%, #aaa)',
+
+  ModalHslaBgColor: 'hsla(0, 0%, 40%, 0.56863)'
 };
 
 export const GlobalStyles = createGlobalStyle`

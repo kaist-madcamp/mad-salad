@@ -3,10 +3,10 @@ import { Line } from 'react-chartjs-2';
 import styled from 'styled-components';
 import { fetchHistoryAPI } from '../../../lib/api/history';
 import { Notification } from './CategoryChart';
-import { FetchHistoryData } from '../../../lib/api/types';
+import { FetchHistoryData, FetchHistoryInput } from '../../../lib/api/types';
 
 interface Props {
-  selectedDate: { year: number; month: number };
+  selectedDate: FetchHistoryInput;
 }
 
 const DateChart = ({ selectedDate }: Props) => {
@@ -17,7 +17,7 @@ const DateChart = ({ selectedDate }: Props) => {
   });
 
   const dailyArray = [
-    ...Array(new Date(selectedDate.year, selectedDate.month, 0).getDate()),
+    ...Array(new Date(+selectedDate.year, +selectedDate.month, 0).getDate()),
   ].map((_, i) => i + 1);
 
   const zeroArr = new Array(dailyArray?.length).fill(0);

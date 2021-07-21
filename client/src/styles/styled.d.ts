@@ -18,5 +18,6 @@ declare module 'styled-components' {
     itemRowColor?: string;
     linearGradientLeft?: string;
     linearGradientRight?: string;
+    ModalHslaBgColor?: string;
   }
 }

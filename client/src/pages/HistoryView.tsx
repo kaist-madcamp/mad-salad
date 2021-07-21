@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { useState } from 'react';
 import MonthSelectorWrapper from '../components/anlytics/MonthSelectorWrapper';
 import SumIndicatorWrapper from '../components/anlytics/SumIndicatorWrapper';
@@ -13,6 +14,7 @@ import {
   fetchHistoryByCreatedAtAPI,
 } from '../lib/api/history';
 import { Notification } from '../components/anlytics/chart/CategoryChart';
+import PageTitle from '../components/PageTitle';
 
 export enum SumIndicatorType {
   DEFAULT = 'DEFAULT',
@@ -49,6 +51,7 @@ export default function HistoryView() {
   );
 
   const MonthIndicatorClickedHandler = (data: FetchHistoryInput) => {
+    console.log('here!! : ', data);
     setSelectedDate(data);
   };
 
@@ -57,8 +60,12 @@ export default function HistoryView() {
   };
 
   return (
-    <>
-      <MonthSelectorWrapper onClicked={MonthIndicatorClickedHandler} />
+    <Container>
+      <PageTitle title="Home" />
+      <MonthSelectorWrapper
+        monthDate={selectedDate.month}
+        onClicked={MonthIndicatorClickedHandler}
+      />
       <SumIndicatorWrapper
         historyData={historyData!}
         selectedSumIndicator={selectedSumIndicator}
@@ -70,8 +77,13 @@ export default function HistoryView() {
         <HistoryViewWrapper
           historyDataByCreatedAt={historyDataByCreatedAt!}
           selectedSumIndicator={selectedSumIndicator}
+          selectedDate={selectedDate}
         />
       )}
-    </>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  margin: 70px 0px 0px;
+`;

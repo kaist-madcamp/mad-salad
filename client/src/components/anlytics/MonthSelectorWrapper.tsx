@@ -127,7 +127,7 @@ const Year = styled.div`
   font-size: 19px;
 `;
 
-const MonthBtn = styled.button`
+export const MonthBtn = styled.button`
   border: none;
   color: inherit;
   background-color: inherit;
