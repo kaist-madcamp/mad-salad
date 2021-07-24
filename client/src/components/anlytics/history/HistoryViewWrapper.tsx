@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';
-import Modal from '../UI/Modal';
+import Modal from '../../UI/Modal';
 import HistoryCardContainer from './HistoryCardContainer';
 import HistoryColumn from './HistoryColumn';
 import HistoryRow from './HistoryRow';
@@ -9,39 +9,86 @@ import HistoryCategoryContainer from './HistoryCategoryContainer';
 import {
   DefaultHistoryData,
   FetchHistoryByCreatedAtData,
+  FetchHistoryInput,
   GetAllAccountData,
   GetAllCategoriesData,
 } from '../../../lib/api/types';
 import { SumIndicatorType } from '../../../pages/HistoryView';
 import { getAllAccount } from '../../../lib/api/account';
 import { getAllCategories } from '../../../lib/api/category';
+import { getPaymentEnKeyName } from '../../../lib/helper';
+import {
+  createTransaction,
+  deleteTransaction,
+  updateTransaction,
+} from '../../../lib/api/transaction';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   historyDataByCreatedAt: FetchHistoryByCreatedAtData[][];
   selectedSumIndicator: SumIndicatorType;
+  selectedDate: FetchHistoryInput;
 }
 
+type PickedDataType = {
+  transactionId?: number;
+  type: 'expenditure' | 'income' | 'receive' | 'send';
+  categoryName: string;
+  categoryId?: number;
+  accountName: string;
+  accountId?: number;
+  label: string;
+  amount: string;
+};
 export default function HistoryViewWrapper({
   historyDataByCreatedAt,
   selectedSumIndicator,
+  selectedDate,
 }: Props) {
   const [historyFormClicked, setHistoryFormClicked] = useState(false);
-  const [pickedType, setPickedType] = useState<'expenditure' | 'income'>(
-    'expenditure',
-  );
-  const [pickedDate, setPickedDate] = useState(new Date().toLocaleDateString());
-  const [pickedCategory, setPickedCategory] = useState(() => {
-    if (pickedType === 'expenditure') return '식비';
-    else return '용돈';
+  const [dateKeystroke, setDateKeystroke] = useState({
+    year: selectedDate.year,
+    month: selectedDate.month,
+    day: 21,
   });
-  const [pickedCard, setPickedCard] = useState('');
-  const [label, setLabel] = useState('');
-  const [amount, setAmount] = useState('');
+
+  const [pickedData, setPickedData] = useState<PickedDataType>({
+    transactionId: undefined,
+    type: 'expenditure',
+    categoryName: '식비',
+    categoryId: undefined,
+    accountId: undefined,
+    accountName: '',
+    label: '',
+    amount: '',
+  });
+
+  // console.log(dateKeystroke);
 
   useEffect(() => {
-    if (pickedType === 'income') setPickedCategory('월급');
-    else setPickedCategory('식비');
-  }, [pickedType]);
+    if (pickedData.type === 'income')
+      setPickedData((prev) => ({ ...prev, categoryName: '월급' }));
+    else setPickedData((prev) => ({ ...prev, categoryName: '식비' }));
+  }, [pickedData.type]);
+
+  useEffect(() => {
+    setDateKeystroke({
+      year: selectedDate.year,
+      month: selectedDate.month,
+      day: 21,
+    });
+  }, [selectedDate]);
+
+  const { mutateAsync: mutateUpdateAsync, isLoading: isUpdating } = useMutation(
+    updateTransaction,
+  );
+  const { mutateAsync: mutateDeleteAsync, isLoading: isDeleting } = useMutation(
+    deleteTransaction,
+  );
+  const { mutateAsync: mutateCreateAsync, isLoading: isCreating } = useMutation(
+    createTransaction,
+  );
 
   const { data: accountData } = useQuery<GetAllAccountData[] | undefined>(
     ['account', 'all'],
@@ -63,35 +110,127 @@ export default function HistoryViewWrapper({
     if (historyFormClicked) setHistoryFormClicked(false);
     else {
       setHistoryFormClicked(true);
-      console.log(defaultHistoryData)
+
+      if (!defaultHistoryData) return null;
+      setPickedData({
+        ...defaultHistoryData,
+        accountName: getPaymentEnKeyName(defaultHistoryData.accountName),
+      });
+      const DateArray = new Date(defaultHistoryData?.date)
+        .toLocaleDateString()
+        .split('. ');
+
+      setDateKeystroke({
+        year: +DateArray[0],
+        month: +DateArray[1],
+        day: +DateArray[2],
+      });
     }
   };
 
-  const categoryClickHandler = (category: string) => {
-    setPickedCategory(category);
+  const addHistoryClickHandler = () => {
+    setPickedData({
+      type: 'expenditure',
+      categoryName: '식비',
+      accountName: '',
+      label: '',
+      amount: '',
+    });
+    setHistoryFormClicked(!historyFormClicked);
   };
 
-  const cardClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    setPickedCard(e.currentTarget.className.split(' ')[2]);
+  const categoryClickHandler = (categoryName: string) => {
+    setPickedData((prev) => ({ ...prev, categoryName }));
+  };
+
+  const cardClickHandler = (e: React.BaseSyntheticEvent) => {
+    setPickedData((prev) => ({
+      ...prev,
+      accountName: e.target.className.split(' ')[2],
+    }));
     e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const deleteBtnHandler = async () => {
+    if (window.confirm('삭제하면 되돌릴 수 없습니다.') === false) return null;
+    try {
+      const { transactionId } = pickedData;
+      if (!transactionId) alert('Error. There is no transactionId ');
+      const { data } = await mutateDeleteAsync(transactionId!);
+      if (!data.ok) alert(data.error);
+      console.log('transaction delete 성공');
+      setHistoryFormClicked(false);
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  };
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const numberPatt = /[1-9]/g;
     // Input Validation
-    if (!numberPatt.test(amount)) alert('금액은 숫자로 적어주세요.');
-    if (pickedCard === '') alert('지출한 카드를 선택해주세요.');
+    if (!numberPatt.test(pickedData.amount))
+      return alert('금액은 숫자로 적어주세요.');
+    if (pickedData.accountName === '')
+      return alert('지출한 카드를 선택해주세요.');
 
-    // HTTP request to Server.
-    console.log(
-      pickedType,
-      pickedDate,
-      pickedCategory,
-      pickedCard,
+    const {
+      transactionId,
       label,
       amount,
+      categoryName,
+      type,
+      accountId,
+      accountName,
+    } = pickedData;
+
+    console.log(label, amount, categoryName, type, accountId, accountName);
+    if (!(label && amount && categoryName && type && accountName))
+      return alert('정보를 전부 입력해주세요.');
+
+    const foundAccount = accountData?.find(
+      (acc) => getPaymentEnKeyName(acc.name) === accountName,
     );
+
+    const { year, month, day } = dateKeystroke;
+    // Create transaction
+    if (!transactionId) {
+      try {
+        const { data } = await mutateCreateAsync({
+          type,
+          accountId: foundAccount?.id!,
+          content: label,
+          amount,
+          categoryName,
+          date: `${year}-${month}-${day}`,
+        });
+        if (!data.ok) return alert(data.error);
+        console.log('transaction create 성공');
+        setHistoryFormClicked(false);
+      } catch (error) {
+        alert(error);
+      }
+    } else {
+      // Update transaction
+      try {
+        const { data } = await mutateUpdateAsync({
+          transactionId,
+          content: label,
+          amount,
+          categoryName,
+          type,
+          createdAt: `${year}-${month}-${day}`,
+          accountId: foundAccount?.id!,
+        });
+        if (!data.ok) return alert(data.error);
+        console.log('transaction update 성공');
+        setHistoryFormClicked(false);
+      } catch (error) {
+        console.log(error);
+        alert(error);
+      }
+    }
   };
 
   if (!historyDataByCreatedAt) return null;
@@ -106,18 +245,24 @@ export default function HistoryViewWrapper({
               selectedSumIndicator !== 'DEFAULT'
             )
               return;
+            const type = row.type.toLowerCase() as
+              | 'income'
+              | 'expenditure'
+              | 'receive'
+              | 'send';
             return (
               <HistoryRow
                 key={row.id}
                 onClicked={() =>
                   toggleShowModal({
                     transactionId: row.id,
-                    accountId: row.accountId,
+                    type: type,
+                    date: row.createdAt,
+                    categoryName: row.category.name,
+                    categoryId: row.category.id,
                     accountName: row.account.name,
-                    amount: row.amount,
-                    categoryId: row.categoryId,
-                    createdAt: row.createdAt,
-                    type: row.type,
+                    accountId: row.account.id,
+                    amount: row.amount + '',
                     label: row.content,
                   })
                 }
@@ -130,70 +275,138 @@ export default function HistoryViewWrapper({
           })}
         </HistoryColumn>
       ))}
-      <Modal isClose={!historyFormClicked} onClose={toggleShowModal}>
-        <HistoryForm onSubmit={submitHandler}>
-          <IconWrapper>
-            <CloseIcon />
-          </IconWrapper>
+      {historyFormClicked && (
+        <Modal isClose={!historyFormClicked} onClose={toggleShowModal}>
+          <HistoryForm onSubmit={submitHandler}>
+            <IconWrapper>
+              <CloseIcon />
+            </IconWrapper>
 
-          <TypePicker>
-            <TypeIndicator
-              className="income"
-              selected={pickedType === 'income'}
-              onClick={() => setPickedType('income')}
-            >
-              Income
-            </TypeIndicator>
-            <TypeIndicator
-              className="expenditure"
-              selected={pickedType === 'expenditure'}
-              onClick={() => setPickedType('expenditure')}
-            >
-              Expenditure
-            </TypeIndicator>
-          </TypePicker>
+            <TypePicker>
+              <TypeIndicator
+                className="income"
+                selected={pickedData.type === 'income'}
+                onClick={() =>
+                  setPickedData((prev) => ({ ...prev, type: 'income' }))
+                }
+              >
+                Income
+              </TypeIndicator>
+              <TypeIndicator
+                className="expenditure"
+                selected={pickedData.type === 'expenditure'}
+                onClick={() =>
+                  setPickedData((prev) => ({ ...prev, type: 'expenditure' }))
+                }
+              >
+                Expenditure
+              </TypeIndicator>
+            </TypePicker>
 
-          <DatePicker>{pickedDate}</DatePicker>
+            <DatePicker>
+              <div>
+                <YearInput
+                  onChange={(e) =>
+                    setDateKeystroke((prev) => ({
+                      ...prev,
+                      year: +e.target.value,
+                    }))
+                  }
+                  maxLength={4}
+                  value={dateKeystroke.year}
+                />
+                <MonthInput
+                  onChange={(e) =>
+                    setDateKeystroke((prev) => ({
+                      ...prev,
+                      month: +e.target.value,
+                    }))
+                  }
+                  maxLength={2}
+                  value={dateKeystroke.month}
+                />
+                <DayInput
+                  onChange={(e) =>
+                    setDateKeystroke((prev) => ({
+                      ...prev,
+                      day: +e.target.value,
+                    }))
+                  }
+                  maxLength={2}
+                  value={dateKeystroke.day}
+                />
+              </div>
+            </DatePicker>
 
-          <CategoryPicker>
-            <HistoryCategoryContainer
-              pickedCategory={pickedCategory}
-              pickedType={pickedType}
-              onClicked={categoryClickHandler}
-              allCategoryData={categoryData!}
-            />
-          </CategoryPicker>
+            <CategoryPicker>
+              <HistoryCategoryContainer
+                pickedCategory={pickedData.categoryName}
+                pickedType={pickedData.type}
+                onClicked={categoryClickHandler}
+                allCategoryData={categoryData!}
+              />
+            </CategoryPicker>
 
-          <CardPicker>
-            <HistoryCardContainer
-              onClicked={cardClickHandler}
-              pickedCard={pickedCard}
-              allCardData={accountData!}
-            />
-          </CardPicker>
+            <CardPicker>
+              <HistoryCardContainer
+                onClicked={cardClickHandler}
+                pickedCard={pickedData.accountName}
+                allCardData={accountData!}
+              />
+            </CardPicker>
 
-          <InputWrapper>
-            <ContentInput
-              value={label}
-              onChange={(e) => setLabel(e.currentTarget.value)}
-              placeholder="Label"
-            />
-            <ContentInput
-              value={amount}
-              onChange={(e) => setAmount(e.currentTarget.value)}
-              placeholder="Amount"
-            />
-          </InputWrapper>
+            <InputWrapper>
+              <ContentInput
+                value={pickedData.label}
+                onChange={(e) => {
+                  const keystroke = e.currentTarget?.value;
+                  return setPickedData((prev) => {
+                    return {
+                      ...prev,
+                      label: keystroke,
+                    };
+                  });
+                }}
+                placeholder="Label"
+              />
+              <ContentInput
+                value={pickedData.amount}
+                onChange={(e) => {
+                  const keystroke = e.currentTarget?.value;
+                  return setPickedData((prev) => {
+                    return {
+                      ...prev,
+                      amount: keystroke,
+                    };
+                  });
+                }}
+                placeholder="Amount"
+              />
+            </InputWrapper>
 
-          <SubmitButtonWrapper>
-            <SubmitButton
-              disabled={!label || !amount}
-              type="submit"
-              value="Done"
-            />
-          </SubmitButtonWrapper>
-        </HistoryForm>
-      </Modal>
+            <SubmitButtonWrapper>
+              <SubmitButton
+                disabled={!pickedData.label || !pickedData.amount}
+                type="submit"
+                value={isUpdating ? 'Updating...' : 'Done'}
+              />
+              {pickedData.transactionId && (
+                <SubmitButton
+                  className="delete-btn"
+                  type="button"
+                  value={isDeleting ? 'Deleting...' : 'Delete'}
+                  onClick={deleteBtnHandler}
+                />
+              )}
+            </SubmitButtonWrapper>
+          </HistoryForm>
+        </Modal>
+      )}
+
+      <FloatingBlock onClick={addHistoryClickHandler}>
+        <FontAwesomeIcon color={'#000'} size="2x" icon={faPlusCircle} />
+        <Text>Add History</Text>
+      </FloatingBlock>
     </Container>
   );
 }
@@ -210,7 +423,7 @@ const HistoryForm = styled.form`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: 75px;
+  margin-bottom: 155px;
 `;
 
 const IconWrapper = styled.div`
@@ -305,8 +518,8 @@ const InputWrapper = styled.div`
 
 const ContentInput = styled.input`
   background: transparent;
-  color: #f0f0f0;
-  background-color: #333;
+  color: ${(props) => props.theme.itemRowColor};
+  background-color: ${(props) => props.theme.itemRowBgColor};
   border: none;
   box-sizing: border-box;
   border-radius: 15px;
@@ -341,7 +554,70 @@ const SubmitButton = styled.input`
   text-align: center;
   color: white;
   cursor: pointer;
+  & + & {
+    margin: 30px 0;
+  }
   &:disabled {
     opacity: 0.5;
   }
+  &.delete-btn {
+    background-color: #ee4337;
+  }
+`;
+
+const FloatingBlock = styled.div`
+  position: fixed;
+  display: flex;
+  bottom: 43px;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: space-between;
+  align-items: center;
+  align-items: center;
+  width: 195px;
+  height: 51px;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.3);
+  background: #f0f0f0;
+  border-radius: 8514px;
+  padding-left: 4px;
+  cursor: pointer;
+  svg {
+    margin-left: 5px;
+  }
+`;
+
+const Text = styled.div`
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  margin-right: 35px;
+  color: black;
+`;
+
+const Input = styled.input`
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+  color: ${(props) => props.theme.itemRowColor};
+  outline: none;
+  &:focus {
+    color: #ff7d1f;
+  }
+`;
+const YearInput = styled(Input)`
+  width: 85px;
+`;
+
+const MonthInput = styled(Input)`
+  width: 43px;
+`;
+
+const DayInput = styled(Input)`
+  width: 43px;
 `;

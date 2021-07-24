@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { FetchHistoryInput } from '../../lib/api/types.d';
 import SwipeableViews from 'react-swipeable-views';
-
-interface Props {
-  monthDate: number;
-  onClicked: (data: FetchHistoryInput) => void;
-}
+import styled from 'styled-components';
+import { MonthBtn } from '../anlytics/MonthSelectorWrapper';
 
 const list = [
   'Jan',
@@ -23,13 +18,16 @@ const list = [
   'Dec',
 ];
 
-export default function MonthSelectorWrapper({ monthDate, onClicked }: Props) {
-  const monthIndex = monthDate - 1;
-
+interface Props {
+  index: number;
+  changeIndex_minus: () => void;
+  changeIndex_plus: () => void;
+}
+const SwipeView = ({ index, changeIndex_minus, changeIndex_plus }: Props) => {
   return (
     <SwipeableViews
       enableMouseEvents
-      index={monthIndex}
+      index={index}
       disabled={true} //swipe 불가
     >
       {list.map((el, i) => (
@@ -37,14 +35,12 @@ export default function MonthSelectorWrapper({ monthDate, onClicked }: Props) {
           <MonthList>
             <MonthBefore>
               {i >= 1 ? (
-                <Year className="year">
+                <Year>
                   2021
                   <br />
                 </Year>
               ) : null}
-              <MonthBtnLeft
-                onClick={() => onClicked({ year: 2021, month: monthDate - 1 })}
-              >
+              <MonthBtnLeft onClick={changeIndex_minus}>
                 {list[i - 1]}
               </MonthBtnLeft>
             </MonthBefore>
@@ -62,9 +58,7 @@ export default function MonthSelectorWrapper({ monthDate, onClicked }: Props) {
                   <br />
                 </Year>
               ) : null}
-              <MonthBtnRight
-                onClick={() => onClicked({ year: 2021, month: monthDate + 1 })}
-              >
+              <MonthBtnRight onClick={changeIndex_plus}>
                 {list[i + 1]}
               </MonthBtnRight>
             </MonthAfter>
@@ -73,7 +67,8 @@ export default function MonthSelectorWrapper({ monthDate, onClicked }: Props) {
       ))}
     </SwipeableViews>
   );
-}
+};
+
 const MonthList = styled.div`
   width: 90%;
   margin: 10px auto;
@@ -83,29 +78,22 @@ const MonthList = styled.div`
   font-weight: bolder;
 `;
 
-const MonthCurrent = styled.div`
-  color: black;
-  display: 'center';
-  padding: 15;
-  height: 100;
-  color: ${(props) => props.theme.opositeColor};
-  flex: 1;
-  width: 40%;
-  font-size: 45px;
-`;
-
 const MonthBefore = styled.div`
   color: darkgray;
   flex: 1;
   width: 25%;
   font-size: 45px;
-  &:hover {
-    button,
-    div {
-      color: ${(props) => props.theme.opositeColor};
-      transition: color 0.4s ease;
-    }
-  }
+`;
+
+const MonthCurrent = styled.div`
+  color: black;
+  display: 'center';
+  padding: 15;
+  height: 100;
+  color: '#000';
+  flex: 1;
+  width: 40%;
+  font-size: 45px;
 `;
 
 const MonthAfter = styled.div`
@@ -113,13 +101,6 @@ const MonthAfter = styled.div`
   flex: 1;
   width: 25%;
   font-size: 45px;
-  &:hover {
-    button,
-    div {
-      color: ${(props) => props.theme.opositeColor};
-      transition: color 0.4s ease;
-    }
-  }
 `;
 
 const Year = styled.div`
@@ -127,15 +108,6 @@ const Year = styled.div`
   font-size: 19px;
 `;
 
-export const MonthBtn = styled.button`
-  border: none;
-  color: inherit;
-  background-color: inherit;
-  font-size: 45px;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: bold;
-`;
 const MonthBtnLeft = styled.button`
   border: none;
   background-color: inherit;
@@ -143,7 +115,8 @@ const MonthBtnLeft = styled.button`
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
-  background: ${(props) => props.theme.linearGradientLeft};
+  /* color: darkgray; */
+  background: linear-gradient(to left, darkgray, white);
   color: transparent;
   -webkit-background-clip: text;
 `;
@@ -152,11 +125,12 @@ const MonthBtnRight = styled.button`
   border: none;
   background-color: inherit;
   font-size: 45px;
+  cursor: pointer;
   display: inline-block;
   font-weight: bold;
-  background: linear-gradient(to left, #333 30%, #aaa);
-  background: ${(props) => props.theme.linearGradientRight};
+  background: linear-gradient(to right, darkgray, white);
   color: transparent;
   -webkit-background-clip: text;
-  cursor: pointer;
 `;
+
+export default SwipeView;

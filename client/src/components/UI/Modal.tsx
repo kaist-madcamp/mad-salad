@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { PortalConsumer } from '../../../providers/PortalProvider';
+import { PortalConsumer } from '../../providers/PortalProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -65,7 +65,7 @@ const HistoryFormWrapper = styled.div<{ close: boolean }>`
   bottom: 0px;
   max-height: calc(100% - 30px);
   height: 92%;
-  background: hsla(0, 0%, 40%, 0.56863);
+  background: ${(props) => props.theme.ModalHslaBgColor};
   border-radius: 30px 30px 0px 0px;
   overflow-y: scroll;
   overflow-x: hidden;

@@ -1,0 +1,32 @@
+.receiveModalBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(200, 200, 200, 0.5);
+    backdrop-filter: blur(1.875rem) saturate(1.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    overflow-y: scroll;
+}
+
+.receiveModalContainer {
+    width: 500px;
+    margin-top: 300px;
+    margin-bottom: 100px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.element {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+}

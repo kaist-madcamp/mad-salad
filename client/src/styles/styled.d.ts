@@ -3,6 +3,7 @@ import 'styled-components';
 declare module 'styled-components' {
   export interface DefaultTheme {
     accent: string;
+    opositeColor?: string;
     errorMsgColor: string;
     bgColor?: string;
     borderColor?: string;
@@ -15,5 +16,8 @@ declare module 'styled-components' {
     backgroundAttachment?: string;
     itemRowBgColor?: string;
     itemRowColor?: string;
+    linearGradientLeft?: string;
+    linearGradientRight?: string;
+    ModalHslaBgColor?: string;
   }
 }

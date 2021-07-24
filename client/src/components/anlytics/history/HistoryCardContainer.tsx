@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -17,6 +17,7 @@ export default function HistoryCardContainer({
   allCardData,
 }: Props) {
   if (!allCardData) return <p>등록한 카드가 없습니다.</p>;
+
   return (
     <CardContainer>
       {allCardData?.map((card, idx) => {
@@ -25,7 +26,6 @@ export default function HistoryCardContainer({
           <Card
             key={card.id}
             className={`card ${EnKey} ${pickedCard === EnKey && 'selected'}`}
-            id={`payment-${idx + 1}`}
             onClick={onClicked}
           >
             <FontAwesomeIcon
