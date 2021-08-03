@@ -27,6 +27,9 @@
 - 지출과 수입 유형을 구분하여 따로 모아 볼 수 있음.
 - 거래 내역을 추가할 수 있음.
 
+![mad_salad_video_1](https://user-images.githubusercontent.com/40633713/128043882-f664e3e4-6c76-4869-8438-8dab33fda57a.gif)
+
+
 ### Calendar
 
 - 사용자의 거래 내역을 날짜별로 분류하여 달력에 나타내줌.
@@ -36,10 +39,18 @@
 - 지불 방법 선택시 선택된 카드에 floating 애니메이션 적용
 - Add History 버튼을 통해 거래 내역을 추가할 수 있음.
 
+![mad_salad_video_2_1](https://user-images.githubusercontent.com/40633713/128048392-ea26eba8-5b9c-4bc3-912c-a599d4518c4e.gif)
+![mad_salad_video_2_2](https://user-images.githubusercontent.com/40633713/128048461-cf4f6db7-4082-4134-bf20-1b2d4f4c745d.gif)
+
+
 ### Analytics
 
 - By Categoreis: 사용자의 소비를 파이 그래프와 막대 그래프를 이용해, 카테고리로 나눠 비교 분석함.
 - By Dates: 사용자의 소비를 꺽은선 그래프를 이용해, 날짜별로 비교 분석함.
+![mad_salad_video_3_1](https://user-images.githubusercontent.com/40633713/128047271-cfba9832-abea-4848-aba1-5383f0751277.gif)
+![mad_salad_video_3_2](https://user-images.githubusercontent.com/40633713/128047412-c7699a10-3240-4042-9bf8-152231d5927d.gif)
+
+
 
 ### Payment Management
 
@@ -53,6 +64,10 @@
 - 받는 user에게 송금 transaction이 pending 되어 있다가 
  해당 user에게 pending 되어있는 transaction이 들어오면 송금을 받겠냐는 alert dialog가 뜨게됨.
 - 수락을 누르면 transaction commit, 거절을 누르면 rollback
+
+![mad_salad_video_4_1](https://user-images.githubusercontent.com/40633713/128050711-f9aff210-b402-4bb4-afea-dd3e42dd023d.gif)
+![mad_salad_video_4_2](https://user-images.githubusercontent.com/40633713/128050776-4cd9e4d0-9181-4be0-983e-03240af9b44c.gif)
+
 
 ***
 # Server
