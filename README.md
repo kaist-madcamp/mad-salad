@@ -87,7 +87,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 ## DB schema
 PostgreSQL database schema
 
-<img width="982" alt="스크린샷 2021-08-04 오전 2 02 32" src="https://user-images.githubusercontent.com/40633713/128056520-3ee865aa-d0c9-446e-8dca-ede0560b9e5d.png">
+<img alt="스크린샷 2021-08-04 오전 2 02 32" src="https://user-images.githubusercontent.com/40633713/128056520-3ee865aa-d0c9-446e-8dca-ede0560b9e5d.png" width="550" height="350">
 
 ## REST API 
 
