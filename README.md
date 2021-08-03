@@ -1,6 +1,6 @@
-# 금융 앱
+# 가계부/금융 앱
 
-사용자의 소비 내역을 시각화, 직관화해주는 금융 어플리케이션.
+사용자의 소비 내역을 시각화, 직관화해주는 가계부/금융 어플리케이션.
 
 ## 팀원
 
@@ -87,6 +87,7 @@ Mysql database schema
 - [x] [Show history by month](https://github.com/kaist-madcamp/Week3-finance-app/blob/5f0409d62bb17e4452f7b96178cfa9bd7d5f9dc6/server/src/controllers/TransactionController.ts#L545)
 - [x] [Show history by month grouped by history](https://github.com/kaist-madcamp/Week3-finance-app/blob/5f0409d62bb17e4452f7b96178cfa9bd7d5f9dc6/server/src/controllers/TransactionController.ts#L604)  
 - [x] [Show history by month grouped by created date](https://github.com/kaist-madcamp/Week3-finance-app/blob/5f0409d62bb17e4452f7b96178cfa9bd7d5f9dc6/server/src/controllers/TransactionController.ts#L676)
+- [x] [Get pending Transactions which are in the state right before sending and receiving money](https://github.com/kaist-madcamp/mad-salad/blob/ef365b370ed164f784bc36fce5d99d9b68cfce16/server/src/controllers/TransactionController.ts#L874)  
 
 [Category](https://github.com/kaist-madcamp/Week3-finance-app/blob/5f0409d62bb17e4452f7b96178cfa9bd7d5f9dc6/server/src/routes/category.ts#L1)
 
