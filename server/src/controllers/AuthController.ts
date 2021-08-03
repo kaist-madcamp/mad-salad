@@ -1,66 +1,60 @@
 import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import config from "../config/config";
-import { PrismaClient } from '.prisma/client'
-import bcrypt from "bcrypt"
+import { PrismaClient } from ".prisma/client";
+import bcrypt from "bcrypt";
 
-const {user} = new PrismaClient()
+const { user } = new PrismaClient();
 
-class AuthController { 
+class AuthController {
   static login = async (req: Request, res: Response) => {
     //Check if username and password are set
-    
 
     let { email, password } = req.body;
     if (!(email && password)) {
       res.json({
         ok: false,
-        error: "email or password is null"
-      })
-      return
+        error: "email or password is null",
+      });
+      return;
     }
-    
-    //Get user from database 
+
+    //Get user from database
     const userExist = await user.findUnique({
-        where: {
-            email
-        },
-        select :{
-            email:true,
-            password: true,
-            name: true,
-            id:true
-        }
-    })
-    
-    if(!userExist){
-        return res.json({
-            ok: false,
-            error: "user doesn't exit"
-        })
+      where: {
+        email,
+      },
+      select: {
+        email: true,
+        password: true,
+        name: true,
+        id: true,
+      },
+    });
+
+    if (!userExist) {
+      return res.json({
+        ok: false,
+        error: "user doesn't exit",
+      });
     }
 
     //Check if encrypted password match
-    if (!bcrypt.compareSync(password,userExist.password)) {
+    if (!bcrypt.compareSync(password, userExist.password)) {
       res.json({
-        ok:false,
-        error:"incorrect password"
+        ok: false,
+        error: "incorrect password",
       });
-      console.log("password no match")
+      console.log("password no match");
       return;
     }
 
     //Sing JWT, valid for 1 hour
-    const token = jwt.sign(
-      { userId: userExist.id},
-      config.jwtSecret//,
-      //{ expiresIn: "1h" }
-    );
+    const token = jwt.sign({ userId: userExist.id }, "asdasdsaxzcqwkn12kmlasm");
 
     //Send the jwt in the response
     res.json({
       ok: true,
-      token: token
+      token: token,
     });
   };
 
@@ -69,71 +63,68 @@ class AuthController {
     const token = <string>req.headers["authorization"];
     let jwtPayload;
     try {
-      jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+      jwtPayload = <any>jwt.verify(token, "asdasdsaxzcqwkn12kmlasm");
     } catch (error) {
       res.status(200).json({
         ok: false,
-        error: "invalid token"
+        error: "invalid token",
       });
       return;
-    }//do I need this?
-    const { userId } = jwtPayload
-    
+    } //do I need this?
+    const { userId } = jwtPayload;
 
     //Get parameters from the body
     const { oldPassword, newPassword } = req.body;
     if (!(oldPassword && newPassword)) {
       res.json({
-        ok:false,
-        error: "old or newpassword is null"
-      })
-      return
+        ok: false,
+        error: "old or newpassword is null",
+      });
+      return;
     }
 
     //Get user from the database
-    
+
     const userExist = await user.findUnique({
-            where: {
-                id:userId
-            },
-            select :{
-            email:true,
-            password: true,
-            name: true,
-            id:true
-        }
-    })
-     
+      where: {
+        id: userId,
+      },
+      select: {
+        email: true,
+        password: true,
+        name: true,
+        id: true,
+      },
+    });
 
     if (!userExist) {
-        console.log("user doesnt exist")
-        return res.json({
-          ok:false,
-          error:"user doesn't exit"
-        })
+      console.log("user doesnt exist");
+      return res.json({
+        ok: false,
+        error: "user doesn't exit",
+      });
     }
 
     //Check if old password matchs
-    const encryptedPassowrd = bcrypt.hashSync(newPassword, 10)
+    const encryptedPassowrd = bcrypt.hashSync(newPassword, 10);
     if (!bcrypt.compareSync(oldPassword, userExist.password)) {
       res.json({
-        ok:false,
-        error: "incorrect password"
+        ok: false,
+        error: "incorrect password",
       });
-    }else{
-        const updateUser = await user.update({
-            where:{
-                id:userId
-            },
-            data:{
-                password: encryptedPassowrd,
-            }
-        })
-        res.json({
-          ok:true
-        })       
+    } else {
+      const updateUser = await user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: encryptedPassowrd,
+        },
+      });
+      res.json({
+        ok: true,
+      });
     }
-
   };
 }
 export default AuthController;
