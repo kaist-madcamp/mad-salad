@@ -17,8 +17,8 @@ export const fetchHistoryAPI = async (
   );
   if (!data.ok) {
     console.log(data.error);
+    alert(data.error);
   }
-  console.log(data.data);
   return data.data;
 };
 
@@ -29,10 +29,8 @@ export const fetchHistoryByCategoryAPI = async (
     `/transaction/historyByCategory?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
   if (!data.ok) {
-    console.log(data.error)
-    // alert(data.error);
+    alert(data.error);
   }
-  console.log(data.data);
   return data.data;
 };
 
@@ -43,8 +41,7 @@ export const fetchHistoryByCreatedAtAPI = async (
     `/transaction/historyByCreatedAt?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
   if (!data.ok) {
-    console.log(data.error);
+    alert(data.error);
   }
-  console.log(data.data);
   return data.data;
 };

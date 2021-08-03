@@ -69,9 +69,9 @@ const ReceiveModal = ({ setHasPendingTransaction, getPendingData }: Props) => {
         >
           <PendingTransactionContainer>
             <Title className="card kakao">아껴써라</Title>
-            <Row>보낸 사람 : {getPendingData?.user.name}</Row>
+            <Row>보낸 사람 : {getPendingData?.user?.name}</Row>
             <Row>금액 : {priceToString(getPendingData?.amount)}</Row>
-            <Row>날짜 : {getPendingData?.createdAt.slice(0, 10)}</Row>
+            <Row>날짜 : {getPendingData?.createdAt?.slice(0, 10)}</Row>
             <Row>메세지 : {getPendingData?.content}</Row>
             <Message>봉투가 도착했어요.</Message>
             <ReceiveBtn onClick={() => onReceive(getPendingData?.id)}>
