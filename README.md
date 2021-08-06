@@ -17,18 +17,34 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 
 저희가 작성한 코드를 쉽게 볼 수 있도록 ```오픈소스```로 [deploy](https://kaist-madcamp.github.io/mad-salad/)합니다.
 
-## 팀원
+## [TOC](#toc)
+0. [Team](#team)
+1. [Sign up](#sign-up)
+2. [History Tab](#history-tab)
+3. [Calendar Tab](#calendar-tab)
+4. [Analytics Tab](#analytics-tab)
+5. [Transaction Tab](#transaction-tab)
+6. [REST API](#rest-api)
 
-김경하, 정이든, 박종회
+## [Team](#team)
 
-## Web(Client)
+#### Front-end 
+* 정이든 ([Sign up](#sign-up), [History 탭](#history-tab), [Analytics 탭](#analytics-tab), [Transaction 탭](#transaction-tab))
+* 김경하 ([Calendar 탭](#calendar-tab), [Transaction 탭](#transaction-tab))
 
-##### Sign up
+#### Back-end 
+* 박종회 ([Server, REST API](#rest-api))
+
+<br />
+
+# Client side(Web)
+
+## [Sign up](#sign-up)
 
 - 이메일과 비밀번호로 회원가입 가능.
 - 이메일과 비밀번호 validation check 구현.
 
-##### History
+## [History Tab](#history-tab)
 
 - 사용자의 거래 내역을 월별로 모두 모아 보여줌.
 - 지출과 수입 유형을 구분하여 따로 모아 볼 수 있음.
@@ -37,7 +53,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 <img src="https://user-images.githubusercontent.com/40633713/128043882-f664e3e4-6c76-4869-8438-8dab33fda57a.gif" width="750" height="450"/>
 
 
-### Calendar
+## [Calendar Tab](#calendar-tab)
 
 - 사용자의 거래 내역을 날짜별로 분류하여 달력에 나타내줌.
 - 월별 총 지출 및 수입 금액 확인 가능.
@@ -49,7 +65,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 <img src="https://user-images.githubusercontent.com/40633713/128048392-ea26eba8-5b9c-4bc3-912c-a599d4518c4e.gif" width="750" height="450"/>
 <img src="https://user-images.githubusercontent.com/40633713/128048461-cf4f6db7-4082-4134-bf20-1b2d4f4c745d.gif" width="750" height="450"/>
 
-### Analytics
+## [Analytics Tab](#analytics-tab)
 
 - By Categoreis: 사용자의 소비를 파이 그래프와 막대 그래프를 이용해, 카테고리로 나눠 비교 분석함.
 - By Dates: 사용자의 소비를 꺽은선 그래프를 이용해, 날짜별로 비교 분석함.
@@ -58,7 +74,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 <img src="https://user-images.githubusercontent.com/40633713/128047412-c7699a10-3240-4042-9bf8-152231d5927d.gif" width="750" height="450"/>
 
 
-### Payment Management
+## [Transaction Tab](#transaction-tab)
 
 - 사용자의 계좌(거래 수단)을 관리함.
 - 계좌를 추가하고 제거할 수 있음.
@@ -89,7 +105,7 @@ PostgreSQL database schema
 
 <img alt="스크린샷 2021-08-04 오전 2 02 32" src="https://user-images.githubusercontent.com/40633713/128056520-3ee865aa-d0c9-446e-8dca-ede0560b9e5d.png" width="550" height="350">
 
-## REST API 
+## [REST API](#rest-api)
 
 [Auth](https://github.com/kaist-madcamp/Week3-finance-app/blob/5f0409d62bb17e4452f7b96178cfa9bd7d5f9dc6/server/src/routes/auth.ts#L2)
 
