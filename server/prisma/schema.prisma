@@ -1,7 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+//process.env.DATABASE_URL
 
-datasource db {
+datasource db { 
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
@@ -9,6 +10,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["orderByAggregateGroup"]
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 model User {
