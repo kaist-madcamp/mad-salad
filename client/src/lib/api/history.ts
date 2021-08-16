@@ -15,10 +15,7 @@ export const fetchHistoryAPI = async (
   const { data } = await Axios.get<FetchHistoryOutput>(
     `/transaction/history?year=${fetchHistoryInput.year}&month=${fetchHistoryInput.month}`,
   );
-  if (!data.ok) {
-    console.log(data.error);
-    alert(data.error);
-  }
+  if (!data.ok) alert(data.error);
   return data.data;
 };
 

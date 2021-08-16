@@ -23,8 +23,6 @@ export default function CategoryChart({ selectedDate }: Props) {
     },
   );
 
-  console.log(selectedDate);
-
   const dataForPie = {
     labels: historyData?.map((el) => el.categoryName),
     datasets: [

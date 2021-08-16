@@ -18,7 +18,6 @@ import { faSun, faMoon } from '@fortawesome/free-regular-svg-icons';
 import Backdrop from '../components/UI/Backdrop';
 import { PaymentManagerTitle } from '../components/anlytics/payment/PaymentManagerTitle';
 import { PaymentManagerHeader } from '../components/anlytics/payment/PaymentManagerHeader';
-import { PaymentManagerAddButton } from '../components/anlytics/payment/PaymentManagerAddButton';
 import {
   PaymentManagerCard,
   PaymentManagerCardWrapper,
@@ -42,6 +41,9 @@ export default function Home({ darkModeInput }: Props) {
   const { data: getPendingData } = useQuery(
     'getPending',
     getPendingTransactionAPI,
+    {
+      retry: false,
+    },
   );
 
   useEffect(() => {
@@ -61,8 +63,6 @@ export default function Home({ darkModeInput }: Props) {
   const PaymentManagerClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-
-  console.log(getPendingData);
 
   return (
     <Container>
