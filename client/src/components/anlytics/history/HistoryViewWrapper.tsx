@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import styled from 'styled-components';
 import Modal from '../../UI/Modal';
 import HistoryCardContainer from './HistoryCardContainer';
@@ -63,8 +63,6 @@ export default function HistoryViewWrapper({
     label: '',
     amount: '',
   });
-
-  // console.log(dateKeystroke);
 
   useEffect(() => {
     if (pickedData.type === 'income')

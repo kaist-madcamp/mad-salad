@@ -6,7 +6,7 @@ export const getAllAccount = async (): Promise<
 > => {
   const { data } = await Axios.get<GetAllAccountOutput>('/acct/getall');
   if (!data.ok) {
-    console.log(data.error);
+    alert(data.error);
   }
   console.log(data.data);
   return data.data;

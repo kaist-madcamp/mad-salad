@@ -8,7 +8,7 @@ export const getAllCategories = async (): Promise<
     '/category/getAllCategories',
   );
   if (!data.ok) {
-    console.log(data.error);
+    alert(data.error);
   }
   console.log(data.data);
   return data.data;
