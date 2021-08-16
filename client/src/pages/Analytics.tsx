@@ -99,6 +99,5 @@ const AnalyticsOptionBtn = styled(button)<{ checked: boolean }>`
 `;
 
 const CategorySection = styled.section`
-  margin: 1.5rem 0 3rem;
-  padding-bottom: 7.5rem;
+  margin: 1.5rem 0;
 `;
