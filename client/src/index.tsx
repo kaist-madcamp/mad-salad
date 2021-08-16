@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <QueryClientProvider client={queryClient}>
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <App />
     </Router>
     <ReactQueryDevtools initialIsOpen={false} />
