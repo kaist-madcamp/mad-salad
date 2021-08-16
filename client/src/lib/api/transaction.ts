@@ -1,4 +1,4 @@
-import Axios from '../defaultClient';
+import Axios, { source } from '../defaultClient';
 import { CoreOutput } from '../CoreOutput';
 import { AxiosResponse } from 'axios';
 import {
@@ -37,10 +37,16 @@ export const deleteTransaction = async (
   });
 };
 
-export const getPendingTransactionAPI = async (): Promise<GetPendingTransactionData> => {
+export const getPendingTransactionAPI = async (): Promise<
+  GetPendingTransactionData | undefined
+> => {
   const { data } = await Axios.get<GetPendingTransactionOutput>(
     '/transaction/getPending',
+    {
+      cancelToken: source.token,
+    },
   );
+
   if (!data.ok) {
     alert(data.error);
   }
@@ -54,4 +60,3 @@ export const ReceivePendingTransactionAPI = async (
     ...receivePendingTransactionInput,
   });
 };
-
