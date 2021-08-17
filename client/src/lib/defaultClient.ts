@@ -9,11 +9,12 @@ const axiosInstance: AxiosInstance = axios.create({
   headers: {
     Authorization: localStorage.getItem(TOKEN),
   },
-  timeout: 6000,
+  timeout: 8000,
 });
 
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (config.url === '/auth/login') return config;
+  if (config.url === '/auth/login' || config.url === '/user/join')
+    return config;
   if (!config.headers.Authorization) {
     source.cancel('Request cancelled, Because token is null');
     window.location.reload();
