@@ -33,7 +33,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 * 김경하 ([Calendar 탭](#calendar-tab), [Transaction 탭](#transaction-tab))
 
 #### Back-end 
-* 박종회 ([Server, REST API](#rest-api))
+* 박종회 ([Server, REST API](#rest-api), Server Deployment on Heroku)
 
 <br />
 
