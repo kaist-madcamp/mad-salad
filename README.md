@@ -15,7 +15,7 @@ Vue로 개발된 프로젝트를 React, TypeScript로 개발했습니다.
 하지만 프레임워크가 달랐기 때문에 단순한 helper function을 제외한 모든 생명주기, 비동기 코드는 직접 custom하여 개발했습니다. <br />
 추가적으로 ```송금``` 기능을 구현하기 위해 팀원들끼리 회의를 거쳐 transaction 스키마를 추가하였습니다.
 
-저희가 작성한 코드를 쉽게 볼 수 있도록 ```오픈소스```로 [deploy](https://kaist-madcamp.github.io/mad-salad/)합니다.
+저희가 작성한 코드를 쉽게 볼 수 있도록 ```오픈소스```로 [deploy](https://mad-salad.netlify.app)합니다.
 
 ## [TOC](#toc)
 0. [Team](#team)
